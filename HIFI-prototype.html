@@ -1,0 +1,709 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+  html, body { margin:0; padding:0; background:#e8e8e8; overflow-x:hidden; }
+  * { box-sizing: border-box; }
+  button { font: inherit; }
+  a { color:#2f6fd0; text-decoration:none; }
+  a:hover { color:#1d4f9c; }
+  ::-webkit-scrollbar { width:10px; height:10px; }
+  ::-webkit-scrollbar-thumb { background:#c9c9c9; border-radius:5px; border:2px solid transparent; background-clip:content-box; }
+</style>
+</helmet>
+
+<div style="display:flex;flex-direction:column;height:100vh;min-height:600px;width:100%;max-width:100vw;overflow:hidden;font-family:-apple-system,BlinkMacSystemFont,'Helvetica Neue',Helvetica,sans-serif;color:#1b1b1b;background:#f3f3f3;-webkit-font-smoothing:antialiased">
+
+  <div style="display:flex;align-items:center;gap:16px;height:44px;padding:0 14px;background:#f6f6f6;border-bottom:1px solid #e2e2e2;flex:none">
+    <div style="display:flex;gap:8px;align-items:center">
+      <span style="width:12px;height:12px;border-radius:50%;background:#ff5f57"></span>
+      <span style="width:12px;height:12px;border-radius:50%;background:#febc2e"></span>
+      <span style="width:12px;height:12px;border-radius:50%;background:#28c840"></span>
+    </div>
+    <div style="display:flex;align-items:center;gap:10px;margin-left:10px">
+      <span style="font-size:12px;color:#3b3b3b">AutoSave</span>
+      <button onClick="{{ toggleAutosave }}" style="{{ autosaveTrackStyle }}"><span style="{{ autosaveKnobStyle }}"></span></button>
+      <button style="display:grid;place-items:center;width:26px;height:26px;border:0;border-radius:5px;background:transparent;cursor:pointer" style-hover="background:#e6e6e6">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="#3a3a3a" stroke-width="1.2"><path d="M2 7.5L8 2.5l6 5"></path><path d="M3.6 8.6V13h8.8V8.6"></path></svg>
+      </button>
+      <button style="display:grid;place-items:center;width:26px;height:26px;border:0;border-radius:5px;background:transparent;cursor:pointer" style-hover="background:#e6e6e6">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="#3a3a3a" stroke-width="1.2"><rect x="2.5" y="2.5" width="11" height="11" rx="1.5"></rect><rect x="5" y="2.5" width="6" height="4"></rect><rect x="5" y="9" width="6" height="4.5"></rect></svg>
+      </button>
+      <div style="display:flex;align-items:center;gap:2px">
+        <button style="display:grid;place-items:center;width:26px;height:26px;border:0;border-radius:5px;background:transparent;cursor:pointer" style-hover="background:#e6e6e6">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="#3a3a3a" stroke-width="1.3"><path d="M13 12c0-3-2.2-4.6-5.4-4.6H3.4"></path><path d="M6.2 4.2L3 7.4l3.2 3.2"></path></svg>
+        </button>
+        <svg width="9" height="9" viewBox="0 0 10 10" fill="none" stroke="#6b6b6b" stroke-width="1.2"><path d="M2 4l3 3 3-3"></path></svg>
+        <button style="display:grid;place-items:center;width:26px;height:26px;border:0;border-radius:5px;background:transparent;cursor:pointer;margin-left:4px" style-hover="background:#e6e6e6">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="#9a9a9a" stroke-width="1.3"><path d="M3 12c0-3 2.2-4.6 5.4-4.6h4.2"></path><path d="M9.8 4.2L13 7.4l-3.2 3.2"></path></svg>
+        </button>
+      </div>
+      <button style="display:grid;place-items:center;width:26px;height:26px;border:0;border-radius:5px;background:transparent;cursor:pointer" style-hover="background:#e6e6e6">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="#3a3a3a"><circle cx="3.5" cy="8" r="1.3"></circle><circle cx="8" cy="8" r="1.3"></circle><circle cx="12.5" cy="8" r="1.3"></circle></svg>
+      </button>
+    </div>
+    <div style="flex:1;display:flex;justify-content:center;align-items:center;gap:7px;min-width:0">
+      <span style="width:17px;height:17px;border-radius:3px;background:{{ accent }};display:grid;place-items:center">
+        <svg width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="#fff" stroke-width="1.4"><rect x="1.5" y="1.5" width="7" height="7"></rect></svg>
+      </span>
+      <span style="font-size:13px;font-weight:600;white-space:nowrap">style</span>
+      <span style="font-size:13px;color:#6d6d6d;white-space:nowrap">— Saved to my Mac</span>
+      <svg width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="#6b6b6b" stroke-width="1.2"><path d="M2 4l3 3 3-3"></path></svg>
+    </div>
+    <div style="display:flex;align-items:center;gap:6px;color:#4a4a4a;font-size:12.5px">
+      <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="#4a4a4a" stroke-width="1.3"><circle cx="7" cy="7" r="4.6"></circle><path d="M10.4 10.4L14 14"></path></svg>
+      <span style="white-space:nowrap">Search (Cmd + Ctrl + U)</span>
+    </div>
+  </div>
+
+  <div style="display:flex;align-items:center;gap:2px;height:32px;padding:0 12px;background:#f6f6f6;border-bottom:1px solid #e2e2e2;flex:none;overflow-x:auto;overflow-y:hidden">
+    <sc-for list="{{ tabs }}" as="tab" hint-placeholder-count="12">
+      <button onClick="{{ tab.onClick }}" style="{{ tab.style }}">{{ tab.label }}</button>
+    </sc-for>
+    <div style="flex:1"></div>
+    <button style="display:flex;align-items:center;gap:6px;height:24px;padding:0 10px;border:1px solid #d5d5d5;border-radius:5px;background:#fff;font-size:12px;color:#2b2b2b;cursor:pointer" style-hover="background:#f0f0f0">
+      <svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="#4a4a4a" stroke-width="1.2"><path d="M2.5 3.5h11v7h-6l-3 2.5V10.5h-2z"></path></svg>
+      Comments
+    </button>
+    <button style="display:flex;align-items:center;gap:6px;height:24px;padding:0 10px;margin-left:8px;border:0;border-radius:5px;background:{{ accent }};color:#fff;font-size:12px;font-weight:600;cursor:pointer" style-hover="filter:brightness(1.08)">
+      <svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="#fff" stroke-width="1.3"><circle cx="12" cy="3.6" r="2.1"></circle><circle cx="4" cy="8" r="2.1"></circle><circle cx="12" cy="12.4" r="2.1"></circle><path d="M6 7l4-2.2M6 9l4 2.2"></path></svg>
+      Share
+      <svg width="9" height="9" viewBox="0 0 10 10" fill="none" stroke="#fff" stroke-width="1.3"><path d="M2 4l3 3 3-3"></path></svg>
+    </button>
+  </div>
+
+  <div style="display:flex;align-items:stretch;gap:0;height:{{ ribbonHeight }};padding:5px 10px;background:#fff;border-bottom:1px solid #dcdcdc;flex:none;overflow-x:auto;overflow-y:hidden">
+
+    <div style="display:flex;flex-direction:column;justify-content:center;gap:2px;padding-right:9px">
+      <button style="display:flex;align-items:center;gap:6px;height:22px;padding:0 6px;border:1px solid transparent;border-radius:4px;background:transparent;font-size:11.5px;color:#1b1b1b;cursor:pointer;white-space:nowrap" style-hover="background:#eef2f8;border-color:#d7e1ef">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="#c0392b" stroke-width="1.2"><rect x="1.5" y="3" width="10" height="8" rx="1"></rect><path d="M13 12v3M11.5 13.5h3"></path></svg>
+        New Slide
+        <svg width="9" height="9" viewBox="0 0 10 10" fill="none" stroke="#6b6b6b" stroke-width="1.2"><path d="M2 4l3 3 3-3"></path></svg>
+      </button>
+      <button style="display:flex;align-items:center;gap:6px;height:22px;padding:0 6px;border:1px solid transparent;border-radius:4px;background:transparent;font-size:11.5px;color:#1b1b1b;cursor:pointer;white-space:nowrap" style-hover="background:#eef2f8;border-color:#d7e1ef">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="#3a3a3a" stroke-width="1.2"><rect x="3.5" y="3" width="9" height="10" rx="1"></rect><rect x="5.5" y="1.6" width="5" height="2.6" rx="0.8"></rect></svg>
+        Paste
+        <svg width="9" height="9" viewBox="0 0 10 10" fill="none" stroke="#6b6b6b" stroke-width="1.2"><path d="M2 4l3 3 3-3"></path></svg>
+      </button>
+      <button style="display:flex;align-items:center;gap:6px;height:22px;padding:0 6px;border:1px solid transparent;border-radius:4px;background:transparent;font-size:11.5px;color:#1b1b1b;cursor:pointer;white-space:nowrap" style-hover="background:#eef2f8;border-color:#d7e1ef">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="#3a3a3a" stroke-width="1.2"><path d="M3 13l2-8 4 6z"></path><path d="M9.5 4.5l2.5-2 1.5 1.5-2.5 2.5z"></path></svg>
+        Format
+      </button>
+    </div>
+
+    <div style="width:1px;background:#e6e6e6;margin:2px 9px 2px 0"></div>
+
+    <div style="display:flex;align-items:center;padding-right:9px">
+      <button style="display:flex;flex-direction:column;align-items:center;gap:3px;width:58px;padding:4px 0;border:1px solid transparent;border-radius:5px;background:transparent;font-size:11.5px;color:#1b1b1b;cursor:pointer" style-hover="background:#eef2f8;border-color:#d7e1ef">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#2f6fd0" stroke-width="1.6"><line x1="4" y1="6" x2="20" y2="6"></line><line x1="4" y1="12" x2="20" y2="12"></line><line x1="4" y1="18" x2="20" y2="18"></line><circle cx="2.4" cy="6" r="1.1" fill="#2f6fd0"></circle><circle cx="2.4" cy="12" r="1.1" fill="#2f6fd0"></circle><circle cx="2.4" cy="18" r="1.1" fill="#2f6fd0"></circle></svg>
+        Agenda
+      </button>
+      <svg width="9" height="9" viewBox="0 0 10 10" fill="none" stroke="#6b6b6b" stroke-width="1.2"><path d="M2 4l3 3 3-3"></path></svg>
+    </div>
+
+    <div style="width:1px;background:#e6e6e6;margin:2px 9px 2px 0"></div>
+
+    <div style="display:flex;align-items:center;gap:2px;padding-right:9px">
+      <button style="display:flex;flex-direction:column;align-items:center;gap:3px;width:54px;padding:4px 0;border:1px solid transparent;border-radius:5px;background:transparent;font-size:11.5px;color:#1b1b1b;cursor:pointer" style-hover="background:#eef2f8;border-color:#d7e1ef">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#2f6fd0" stroke-width="1.5"><rect x="3" y="4" width="7" height="16" rx="1"></rect><rect x="12" y="4" width="4" height="16" rx="1"></rect><rect x="18" y="4" width="3" height="16" rx="1"></rect></svg>
+        Library
+      </button>
+      <button style="display:flex;flex-direction:column;align-items:center;gap:3px;width:54px;padding:4px 0;border:1px solid transparent;border-radius:5px;background:transparent;font-size:11.5px;color:#1b1b1b;cursor:pointer" style-hover="background:#eef2f8;border-color:#d7e1ef">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#2f6fd0" stroke-width="1.5"><rect x="4" y="11" width="4" height="9" fill="#2f6fd0" stroke="none"></rect><rect x="10" y="6" width="4" height="14" fill="#22b07d" stroke="none"></rect><rect x="16" y="14" width="4" height="6" fill="#2f6fd0" stroke="none"></rect></svg>
+        Charts
+      </button>
+      <svg width="9" height="9" viewBox="0 0 10 10" fill="none" stroke="#6b6b6b" stroke-width="1.2"><path d="M2 4l3 3 3-3"></path></svg>
+      <button onClick="{{ openAssist }}" style="{{ assistBtnStyle }}" style-hover="background:#d9e6fa">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#a24bd6" stroke-width="1.5"><path d="M12 3l1.9 4.6L18.5 9.5 13.9 11.4 12 16l-1.9-4.6L5.5 9.5l4.6-1.9z" fill="#c98ae8" stroke="none"></path><path d="M18 15l.9 2.1 2.1.9-2.1.9-.9 2.1-.9-2.1-2.1-.9 2.1-.9z" fill="#a24bd6" stroke="none"></path></svg>
+        Assist
+      </button>
+      <div style="display:flex;flex-direction:column;gap:2px;margin-left:2px">
+        <span style="display:grid;place-items:center;width:20px;height:19px;border-radius:3px;background:#2f6fd0"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="#fff" stroke-width="1.2"><rect x="1.5" y="2.5" width="9" height="7"></rect><line x1="1.5" y1="5" x2="10.5" y2="5"></line></svg></span>
+        <span style="display:grid;place-items:center;width:20px;height:19px;border-radius:3px;background:#2f6fd0"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="#fff" stroke-width="1.2"><circle cx="6" cy="6" r="4"></circle><path d="M6 2v4l3 1.5"></path></svg></span>
+        <span style="display:grid;place-items:center;width:20px;height:19px;border-radius:3px;background:#2f6fd0"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="#fff" stroke-width="1.2"><rect x="2" y="2" width="8" height="8"></rect></svg></span>
+      </div>
+    </div>
+
+    <div style="width:1px;background:#e6e6e6;margin:2px 9px 2px 0"></div>
+
+    <div style="display:flex;gap:10px;padding-right:9px">
+      <div style="display:flex;flex-direction:column;justify-content:center;gap:2px">
+        <button style="display:flex;align-items:center;gap:6px;height:22px;padding:0 6px;border:1px solid transparent;border-radius:4px;background:transparent;font-size:11.5px;color:#1b1b1b;cursor:pointer;white-space:nowrap" style-hover="background:#eef2f8;border-color:#d7e1ef">
+          <svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="#2f6fd0" stroke-width="1.1"><rect x="2" y="3" width="12" height="10"></rect><line x1="2" y1="6.3" x2="14" y2="6.3"></line><line x1="2" y1="9.6" x2="14" y2="9.6"></line><line x1="6" y1="3" x2="6" y2="13"></line><line x1="10" y1="3" x2="10" y2="13"></line></svg>
+          Table
+        </button>
+        <button style="display:flex;align-items:center;gap:6px;height:22px;padding:0 6px;border:1px solid transparent;border-radius:4px;background:transparent;font-size:11.5px;color:#1b1b1b;cursor:pointer;white-space:nowrap" style-hover="background:#eef2f8;border-color:#d7e1ef">
+          <svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="#2f6fd0" stroke-width="1.1"><rect x="1.8" y="2.6" width="7" height="6"></rect><circle cx="10.6" cy="10.4" r="3.4"></circle></svg>
+          Shapes
+          <svg width="9" height="9" viewBox="0 0 10 10" fill="none" stroke="#6b6b6b" stroke-width="1.2"><path d="M2 4l3 3 3-3"></path></svg>
+        </button>
+        <button style="display:flex;align-items:center;gap:6px;height:22px;padding:0 6px;border:1px solid transparent;border-radius:4px;background:transparent;font-size:11.5px;color:#1b1b1b;cursor:pointer;white-space:nowrap" style-hover="background:#eef2f8;border-color:#d7e1ef">
+          <svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="#2f6fd0" stroke-width="1.1"><rect x="2" y="3" width="12" height="10"></rect><circle cx="5.5" cy="6.2" r="1.1"></circle><path d="M2.6 12l3.8-3.6 2.4 2.2 2.2-1.8 2.6 2.4"></path></svg>
+          Images
+          <svg width="9" height="9" viewBox="0 0 10 10" fill="none" stroke="#6b6b6b" stroke-width="1.2"><path d="M2 4l3 3 3-3"></path></svg>
+        </button>
+      </div>
+      <div style="display:flex;flex-direction:column;justify-content:center;gap:2px">
+        <button style="display:flex;align-items:center;gap:6px;height:22px;padding:0 6px;border:1px solid transparent;border-radius:4px;background:transparent;font-size:11.5px;color:#1b1b1b;cursor:pointer;white-space:nowrap" style-hover="background:#eef2f8;border-color:#d7e1ef">
+          <svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="#2f6fd0" stroke-width="1.2"><path d="M6.5 9.5a3 3 0 004.2 0l2.1-2.1a3 3 0 10-4.2-4.2l-.9.9"></path><path d="M9.5 6.5a3 3 0 00-4.2 0L3.2 8.6a3 3 0 104.2 4.2l.9-.9"></path></svg>
+          Data Links
+        </button>
+        <button style="display:flex;align-items:center;gap:6px;height:22px;padding:0 6px;border:1px solid transparent;border-radius:4px;background:transparent;font-size:11.5px;color:#1b1b1b;cursor:pointer;white-space:nowrap" style-hover="background:#eef2f8;border-color:#d7e1ef">
+          <svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="#22834f" stroke-width="1.1"><rect x="2" y="2.6" width="12" height="10.8"></rect><line x1="6.6" y1="2.6" x2="6.6" y2="13.4"></line><line x1="6.6" y1="6.2" x2="14" y2="6.2"></line><line x1="6.6" y1="9.8" x2="14" y2="9.8"></line></svg>
+          Slide Workbook
+        </button>
+        <button style="display:flex;align-items:center;gap:6px;height:22px;padding:0 6px;border:1px solid transparent;border-radius:4px;background:transparent;font-size:11.5px;color:#1b1b1b;cursor:pointer;white-space:nowrap" style-hover="background:#eef2f8;border-color:#d7e1ef">
+          <svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="#22834f" stroke-width="1.1"><rect x="2" y="2.6" width="9" height="10.8"></rect><path d="M12.5 9v4M10.5 11h4"></path></svg>
+          New Excel Link
+        </button>
+      </div>
+      <div style="display:flex;flex-direction:column;justify-content:center;gap:3px">
+        <span style="display:grid;place-items:center;width:20px;height:19px;border-radius:3px;border:1px solid #d9d9d9"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="#2f6fd0" stroke-width="1.1"><rect x="1.5" y="1.5" width="4" height="4"></rect><rect x="6.5" y="6.5" width="4" height="4"></rect></svg></span>
+        <span style="display:grid;place-items:center;width:20px;height:19px;border-radius:3px;border:1px solid #d9d9d9"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="#2f6fd0" stroke-width="1.1"><path d="M1.5 9L4.5 4l2 3 3-5"></path></svg></span>
+        <span style="display:grid;place-items:center;width:20px;height:19px;border-radius:3px;border:1px solid #d9d9d9"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="#2f6fd0" stroke-width="1.1"><circle cx="6" cy="6" r="4.2"></circle><path d="M6 1.8V6l3.6 2"></path></svg></span>
+      </div>
+    </div>
+
+    <div style="width:1px;background:#e6e6e6;margin:2px 9px 2px 0"></div>
+
+    <div style="display:flex;flex-direction:column;justify-content:center;gap:3px;padding-right:9px">
+      <div style="display:flex;align-items:center;gap:4px">
+        <div style="display:flex;align-items:center;justify-content:space-between;width:104px;height:21px;padding:0 5px;border:1px solid #cfcfcf;border-radius:4px;background:#fff;font-size:11.5px">
+          <span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap">Arial (Headi…</span>
+          <svg width="9" height="9" viewBox="0 0 10 10" fill="none" stroke="#6b6b6b" stroke-width="1.2"><path d="M2 4l3 3 3-3"></path></svg>
+        </div>
+        <div style="display:flex;align-items:center;justify-content:space-between;width:52px;height:21px;padding:0 5px;border:1px solid #cfcfcf;border-radius:4px;background:#fff;font-size:11.5px">
+          <span>14</span>
+          <svg width="9" height="9" viewBox="0 0 10 10" fill="none" stroke="#6b6b6b" stroke-width="1.2"><path d="M2 4l3 3 3-3"></path></svg>
+        </div>
+        <span style="display:grid;place-items:center;width:22px;height:21px;border-radius:4px" style-hover="background:#eef2f8"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="#c0392b" stroke-width="1.3"><path d="M3 8a5 5 0 115 5"></path><path d="M3 5v3.2h3.2"></path></svg></span>
+      </div>
+      <div style="display:flex;align-items:center;gap:2px">
+        <button onClick="{{ toggleBold }}" style="{{ boldStyle }}">B</button>
+        <button style="display:grid;place-items:center;width:23px;height:21px;border:1px solid transparent;border-radius:4px;background:transparent;font-size:12.5px;font-style:italic;font-family:Georgia,serif;cursor:pointer" style-hover="background:#eef2f8;border-color:#d7e1ef">I</button>
+        <button style="display:grid;place-items:center;width:23px;height:21px;border:1px solid transparent;border-radius:4px;background:transparent;font-size:12.5px;text-decoration:underline;cursor:pointer" style-hover="background:#eef2f8;border-color:#d7e1ef">U</button>
+        <button style="display:grid;place-items:center;width:23px;height:21px;border:1px solid transparent;border-radius:4px;background:transparent;font-size:12.5px;text-decoration:line-through;cursor:pointer" style-hover="background:#eef2f8;border-color:#d7e1ef">S</button>
+        <button style="display:grid;place-items:center;width:23px;height:21px;border:1px solid transparent;border-radius:4px;background:transparent;font-size:12.5px;cursor:pointer" style-hover="background:#eef2f8;border-color:#d7e1ef">x<sub style="font-size:8px">2</sub></button>
+        <button style="display:grid;place-items:center;width:23px;height:21px;border:1px solid transparent;border-radius:4px;background:transparent;font-size:12.5px;cursor:pointer" style-hover="background:#eef2f8;border-color:#d7e1ef">x<sup style="font-size:8px">2</sup></button>
+      </div>
+      <div style="display:flex;align-items:center;gap:3px">
+        <span style="display:grid;place-items:center;width:23px;height:20px;border-radius:4px" style-hover="background:#eef2f8"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="#3a3a3a" stroke-width="1.2"><rect x="2" y="3" width="12" height="9"></rect><path d="M4.6 9.5l2.6-5 2.6 5M5.6 7.8h3.2"></path></svg></span>
+        <span style="display:grid;place-items:center;width:23px;height:20px;border-radius:4px" style-hover="background:#eef2f8"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="#3a3a3a" stroke-width="1.2"><rect x="2" y="2.5" width="12" height="11" rx="1"></rect><path d="M5 10V6h3a2 2 0 010 4z"></path></svg></span>
+        <span style="display:grid;place-items:center;width:23px;height:20px;border-radius:4px" style-hover="background:#eef2f8"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="#3a3a3a" stroke-width="1.2"><path d="M8 2v12M4 5.5h8"></path></svg></span>
+      </div>
+    </div>
+
+    <div style="width:1px;background:#e6e6e6;margin:2px 9px 2px 0"></div>
+
+    <div style="display:flex;flex-direction:column;justify-content:center;gap:3px;padding-right:9px">
+      <div style="display:flex;align-items:center;gap:3px">
+        <span style="display:flex;align-items:center;gap:2px;padding:2px 3px;border:1px solid #cfcfcf;border-radius:4px;background:#fff"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="#3a3a3a" stroke-width="1.2"><circle cx="3" cy="4" r="1" fill="#3a3a3a"></circle><circle cx="3" cy="8" r="1" fill="#3a3a3a"></circle><circle cx="3" cy="12" r="1" fill="#3a3a3a"></circle><path d="M6 4h8M6 8h8M6 12h8"></path></svg><svg width="8" height="8" viewBox="0 0 10 10" fill="none" stroke="#6b6b6b" stroke-width="1.2"><path d="M2 4l3 3 3-3"></path></svg></span>
+        <span style="display:grid;place-items:center;width:23px;height:21px;border-radius:4px" style-hover="background:#eef2f8"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="#3a3a3a" stroke-width="1.2"><path d="M2.5 3.5h11M2.5 6.6h11M2.5 9.7h11M2.5 12.8h7"></path></svg></span>
+        <span style="display:grid;place-items:center;width:23px;height:21px;border-radius:4px" style-hover="background:#eef2f8"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="#3a3a3a" stroke-width="1.2"><rect x="2.5" y="3" width="11" height="10"></rect><path d="M2.5 6.4h11M6 3v10"></path></svg></span>
+      </div>
+      <div style="display:flex;align-items:center;gap:3px">
+        <span style="display:flex;align-items:center;gap:2px;padding:2px 3px;border:1px solid #cfcfcf;border-radius:4px;background:#fff"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="#3a3a3a" stroke-width="1.1"><text x="1" y="5.6" font-size="5" fill="#3a3a3a" stroke="none">1</text><text x="1" y="10" font-size="5" fill="#3a3a3a" stroke="none">2</text><text x="1" y="14.4" font-size="5" fill="#3a3a3a" stroke="none">3</text><path d="M6 4h8M6 8.4h8M6 12.8h8"></path></svg><svg width="8" height="8" viewBox="0 0 10 10" fill="none" stroke="#6b6b6b" stroke-width="1.2"><path d="M2 4l3 3 3-3"></path></svg></span>
+        <span style="display:grid;place-items:center;width:23px;height:21px;border-radius:4px" style-hover="background:#eef2f8"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="#3a3a3a" stroke-width="1.2"><rect x="2.5" y="3" width="11" height="10"></rect><path d="M2.5 8h11"></path></svg></span>
+        <span style="display:grid;place-items:center;width:23px;height:21px;border-radius:4px" style-hover="background:#eef2f8"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="#3a3a3a" stroke-width="1.2"><rect x="2.5" y="3" width="11" height="10"></rect><path d="M6 3v10M10 3v10"></path></svg></span>
+      </div>
+      <div style="display:flex;align-items:center;gap:3px">
+        <span style="display:grid;place-items:center;width:23px;height:21px;border-radius:4px" style-hover="background:#eef2f8"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="#3a3a3a" stroke-width="1.2"><path d="M2 3.5h12M2 6.6h8M2 9.7h12M2 12.8h8"></path></svg></span>
+        <span style="display:grid;place-items:center;width:23px;height:21px;border-radius:4px" style-hover="background:#eef2f8"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="#3a3a3a" stroke-width="1.2"><path d="M2 3.5h12M4 6.6h8M2 9.7h12M4 12.8h8"></path></svg></span>
+        <span style="display:grid;place-items:center;width:23px;height:21px;border-radius:4px" style-hover="background:#eef2f8"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="#3a3a3a" stroke-width="1.2"><path d="M2 3.5h12M6 6.6h8M2 9.7h12M6 12.8h8"></path></svg></span>
+        <span style="display:grid;place-items:center;width:23px;height:21px;border-radius:4px" style-hover="background:#eef2f8"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="#3a3a3a" stroke-width="1.2"><path d="M6 3.5h8M6 6.6h8M6 9.7h8M2 3.5v10"></path></svg></span>
+        <span style="display:flex;align-items:center;gap:2px;margin-left:2px"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="#3a3a3a" stroke-width="1.2"><path d="M6 4h8M6 8h8M6 12h8M3 3v10M1.6 4.6L3 3l1.4 1.6M1.6 11.4L3 13l1.4-1.6"></path></svg><svg width="8" height="8" viewBox="0 0 10 10" fill="none" stroke="#6b6b6b" stroke-width="1.2"><path d="M2 4l3 3 3-3"></path></svg></span>
+      </div>
+    </div>
+
+    <div style="width:1px;background:#e6e6e6;margin:2px 9px 2px 0"></div>
+
+    <div style="display:flex;flex-direction:column;justify-content:center;gap:3px;padding-right:9px">
+      <div style="display:flex;align-items:center;gap:3px">
+        <span style="display:grid;place-items:center;width:22px;height:20px;border-radius:4px" style-hover="background:#eef2f8"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="#3a3a3a" stroke-width="1.1"><rect x="4" y="3" width="8" height="4"></rect><rect x="4" y="9" width="5" height="4"></rect><path d="M2 2v12"></path></svg></span>
+        <span style="display:grid;place-items:center;width:22px;height:20px;border-radius:4px" style-hover="background:#eef2f8"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="#3a3a3a" stroke-width="1.1"><rect x="4" y="3" width="8" height="4"></rect><rect x="5.5" y="9" width="5" height="4"></rect><path d="M8 2v12"></path></svg></span>
+        <span style="display:grid;place-items:center;width:22px;height:20px;border-radius:4px" style-hover="background:#eef2f8"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="#3a3a3a" stroke-width="1.1"><rect x="4" y="3" width="8" height="4"></rect><rect x="7" y="9" width="5" height="4"></rect><path d="M14 2v12"></path></svg></span>
+        <span style="display:grid;place-items:center;width:22px;height:20px;border-radius:4px;margin-left:6px" style-hover="background:#eef2f8"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="#3a3a3a" stroke-width="1.1"><path d="M2 8h12M2 6v4M14 6v4"></path></svg></span>
+        <div style="display:flex;align-items:center;width:78px;height:21px;padding:0 4px;border:1px solid #cfcfcf;border-radius:4px;background:#fff;font-size:11.5px;justify-content:space-between">
+          <span>10,58 cm</span>
+          <span style="display:flex;flex-direction:column;gap:1px"><svg width="8" height="5" viewBox="0 0 10 6" fill="none" stroke="#6b6b6b" stroke-width="1.2"><path d="M2 4.5l3-3 3 3"></path></svg><svg width="8" height="5" viewBox="0 0 10 6" fill="none" stroke="#6b6b6b" stroke-width="1.2"><path d="M2 1.5l3 3 3-3"></path></svg></span>
+        </div>
+      </div>
+      <div style="display:flex;align-items:center;gap:3px">
+        <span style="display:grid;place-items:center;width:22px;height:20px;border-radius:4px" style-hover="background:#eef2f8"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="#3a3a3a" stroke-width="1.1"><rect x="3" y="4" width="4" height="8"></rect><rect x="9" y="4" width="4" height="5"></rect><path d="M2 2h12"></path></svg></span>
+        <span style="display:grid;place-items:center;width:22px;height:20px;border-radius:4px" style-hover="background:#eef2f8"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="#3a3a3a" stroke-width="1.1"><rect x="3" y="4" width="4" height="8"></rect><rect x="9" y="5.5" width="4" height="5"></rect><path d="M2 8h12"></path></svg></span>
+        <span style="display:grid;place-items:center;width:22px;height:20px;border-radius:4px" style-hover="background:#eef2f8"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="#3a3a3a" stroke-width="1.1"><rect x="3" y="4" width="4" height="8"></rect><rect x="9" y="7" width="4" height="5"></rect><path d="M2 14h12"></path></svg></span>
+        <span style="display:grid;place-items:center;width:22px;height:20px;border-radius:4px;margin-left:6px" style-hover="background:#eef2f8"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="#3a3a3a" stroke-width="1.1"><path d="M8 2v12M6 2h4M6 14h4"></path></svg></span>
+        <div style="display:flex;align-items:center;width:78px;height:21px;padding:0 4px;border:1px solid #cfcfcf;border-radius:4px;background:#fff;font-size:11.5px;justify-content:space-between">
+          <span>9,74 cm</span>
+          <span style="display:flex;flex-direction:column;gap:1px"><svg width="8" height="5" viewBox="0 0 10 6" fill="none" stroke="#6b6b6b" stroke-width="1.2"><path d="M2 4.5l3-3 3 3"></path></svg><svg width="8" height="5" viewBox="0 0 10 6" fill="none" stroke="#6b6b6b" stroke-width="1.2"><path d="M2 1.5l3 3 3-3"></path></svg></span>
+        </div>
+      </div>
+      <div style="display:flex;align-items:center;gap:3px">
+        <span style="display:grid;place-items:center;width:22px;height:20px;border-radius:4px" style-hover="background:#eef2f8"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="#3a3a3a" stroke-width="1.1"><path d="M3 12l3-3M2.6 8.6V13h4.4"></path><rect x="8" y="3" width="5" height="5"></rect></svg></span>
+        <span style="display:grid;place-items:center;width:22px;height:20px;border-radius:4px" style-hover="background:#eef2f8"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="#3a3a3a" stroke-width="1.1"><rect x="2.5" y="2.5" width="11" height="11"></rect><path d="M2.5 8h11M8 2.5v11"></path></svg></span>
+        <span style="display:grid;place-items:center;width:22px;height:20px;border-radius:4px" style-hover="background:#eef2f8"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="#3a3a3a" stroke-width="1.1"><rect x="2.5" y="4" width="11" height="8"></rect><path d="M5.5 4v8M10.5 4v8"></path></svg></span>
+        <span style="display:flex;align-items:center;gap:5px;margin-left:6px;font-size:11.5px"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="#3a3a3a" stroke-width="1.1"><rect x="2.5" y="2.5" width="6" height="6"></rect><path d="M9.5 9.5l4 4M13.5 9.5v4h-4"></path></svg>Scale</span>
+      </div>
+    </div>
+
+    <div style="width:1px;background:#e6e6e6;margin:2px 9px 2px 0"></div>
+
+    <div style="display:flex;flex-direction:column;justify-content:center;gap:3px;padding-right:9px">
+      <span style="height:22px"></span>
+      <button style="display:flex;align-items:center;gap:6px;height:22px;padding:0 6px;border:1px solid transparent;border-radius:4px;background:transparent;font-size:11.5px;color:#8a8a8a;cursor:default;white-space:nowrap">
+        <svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="#a6a6a6" stroke-width="1.2"><rect x="1.8" y="2.5" width="6" height="5"></rect><rect x="8.2" y="8.5" width="6" height="5"></rect><path d="M8.6 5h4.2M7.4 11H3.2"></path></svg>
+        Swap Objects
+      </button>
+      <span style="height:22px"></span>
+    </div>
+
+    <div style="display:flex;flex-direction:column;justify-content:center;gap:2px;padding-right:9px">
+      <button style="display:flex;align-items:center;gap:6px;height:22px;padding:0 6px;border:1px solid transparent;border-radius:4px;background:transparent;font-size:11.5px;color:#1b1b1b;cursor:pointer;white-space:nowrap" style-hover="background:#eef2f8;border-color:#d7e1ef">
+        <span style="display:flex;flex-direction:column;align-items:center;gap:1px"><span style="font-size:11px;font-weight:700;line-height:1">A</span><span style="width:13px;height:3px;background:{{ accent }}"></span></span>
+        Font Colour
+        <svg width="9" height="9" viewBox="0 0 10 10" fill="none" stroke="#6b6b6b" stroke-width="1.2"><path d="M2 4l3 3 3-3"></path></svg>
+      </button>
+      <button style="display:flex;align-items:center;gap:6px;height:22px;padding:0 6px;border:1px solid transparent;border-radius:4px;background:transparent;font-size:11.5px;color:#1b1b1b;cursor:pointer;white-space:nowrap" style-hover="background:#eef2f8;border-color:#d7e1ef">
+        <span style="display:flex;flex-direction:column;align-items:center;gap:1px"><svg width="13" height="11" viewBox="0 0 16 13" fill="none" stroke="#3a3a3a" stroke-width="1.2"><path d="M3 7l4-4 4 4-4 4z"></path><path d="M12 8.4c0 .9.7 1.6 1.4 1.6"></path></svg><span style="width:13px;height:3px;background:#2f6fd0"></span></span>
+        Shape Fill
+        <svg width="9" height="9" viewBox="0 0 10 10" fill="none" stroke="#6b6b6b" stroke-width="1.2"><path d="M2 4l3 3 3-3"></path></svg>
+      </button>
+      <button style="display:flex;align-items:center;gap:6px;height:22px;padding:0 6px;border:1px solid transparent;border-radius:4px;background:transparent;font-size:11.5px;color:#1b1b1b;cursor:pointer;white-space:nowrap" style-hover="background:#eef2f8;border-color:#d7e1ef">
+        <span style="display:flex;flex-direction:column;align-items:center;gap:1px"><svg width="13" height="11" viewBox="0 0 16 13" fill="none" stroke="#3a3a3a" stroke-width="1.4"><rect x="2" y="2" width="12" height="8"></rect></svg><span style="width:13px;height:3px;background:#22b07d"></span></span>
+        Shape Outline
+        <svg width="9" height="9" viewBox="0 0 10 10" fill="none" stroke="#6b6b6b" stroke-width="1.2"><path d="M2 4l3 3 3-3"></path></svg>
+      </button>
+    </div>
+
+    <div style="width:1px;background:#e6e6e6;margin:2px 9px 2px 0"></div>
+
+    <div style="display:flex;align-items:center;gap:8px;padding-right:9px">
+      <div style="display:flex;flex-direction:column;gap:6px">
+        <span style="display:grid;place-items:center;width:24px;height:22px"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="#3a3a3a" stroke-width="1.2"><path d="M8 2v9M5 8l3 3 3-3M3 13.5h10"></path></svg></span>
+        <span style="display:grid;place-items:center;width:24px;height:22px"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="#3a3a3a" stroke-width="1.2"><path d="M2.5 8h11M10 4.5L13.5 8 10 11.5"></path></svg></span>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:2px">
+        <button style="display:flex;align-items:center;gap:6px;height:22px;padding:0 6px;border:1px solid transparent;border-radius:4px;background:transparent;font-size:11.5px;color:#1b1b1b;cursor:pointer;white-space:nowrap" style-hover="background:#eef2f8;border-color:#d7e1ef">
+          <svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="#3a3a3a" stroke-width="1.2"><path d="M2.5 3.5h11v7h-6l-3 2.5V10.5h-2z"></path></svg>
+          Comment
+        </button>
+        <button style="display:flex;align-items:center;gap:6px;height:22px;padding:0 6px;border:1px solid transparent;border-radius:4px;background:transparent;font-size:11.5px;color:#1b1b1b;cursor:pointer;white-space:nowrap" style-hover="background:#eef2f8;border-color:#d7e1ef">
+          <svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="#3a3a3a" stroke-width="1.2"><path d="M14 2L2 6.6l4.6 2.2L8.8 13z"></path></svg>
+          Send Slides
+        </button>
+        <button style="display:flex;align-items:center;gap:6px;height:22px;padding:0 6px;border:1px solid transparent;border-radius:4px;background:transparent;font-size:11.5px;color:#1b1b1b;cursor:pointer;white-space:nowrap" style-hover="background:#eef2f8;border-color:#d7e1ef">
+          <svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="#3a3a3a" stroke-width="1.2"><rect x="2.5" y="2.5" width="11" height="11" rx="1.5"></rect><rect x="5" y="2.5" width="6" height="4"></rect></svg>
+          Save Slides
+        </button>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(2,22px);gap:3px">
+        <span style="display:grid;place-items:center;height:20px"><svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="#2f6fd0" stroke-width="1.2"><rect x="1.8" y="4" width="8" height="8" rx="1"></rect><path d="M10.4 8l3.8-2.4v4.8z"></path></svg></span>
+        <span style="display:grid;place-items:center;height:20px"><svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="#2f6fd0" stroke-width="1.2"><circle cx="8" cy="8" r="6"></circle><path d="M8 7.2v4M8 5h.01"></path></svg></span>
+        <span style="display:grid;place-items:center;height:20px"><svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="#2f6fd0" stroke-width="1.2"><path d="M4 10.5a3 3 0 010-6 4 4 0 017.6 1.1A2.6 2.6 0 0111.4 10.5z"></path></svg></span>
+        <span style="display:grid;place-items:center;height:20px"><svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="#2f6fd0" stroke-width="1.2"><circle cx="8" cy="8" r="6"></circle><path d="M6.2 6.4A1.9 1.9 0 018 5.2c1 0 1.8.7 1.8 1.6 0 1.4-1.8 1.3-1.8 2.6M8 11.4h.01"></path></svg></span>
+        <span style="display:grid;place-items:center;height:20px"><svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="#c0392b" stroke-width="1.2"><path d="M8 2v6M4.6 4.4a5 5 0 106.8 0"></path></svg></span>
+      </div>
+    </div>
+  </div>
+
+  <div style="display:flex;flex:1;min-height:0;background:#f3f3f3">
+
+    <sc-if value="{{ showThumbnails }}" hint-placeholder-val="{{ true }}">
+      <div style="width:clamp(150px,15vw,240px);flex:none;background:#fbfbfb;border-right:1px solid #dcdcdc;overflow-y:auto;overflow-x:hidden;padding:8px 0">
+        <sc-for list="{{ slides }}" as="slide" hint-placeholder-count="6">
+          <div onClick="{{ slide.onClick }}" style="{{ slide.rowStyle }}">
+            <span style="width:16px;text-align:right;font-size:11px;color:#8a8a8a;flex:none">{{ slide.n }}</span>
+            <div style="{{ slide.thumbStyle }}">
+              <span style="position:absolute;top:5px;right:5px;width:22px;height:6px;background:#111;opacity:0.75;border-radius:1px"></span>
+              <span style="position:absolute;left:5px;top:5px;right:34px;font-size:5px;font-weight:700;line-height:1.25;color:#111">{{ slide.title }}</span>
+                <span style="position:absolute;left:5px;top:22px;right:5px;bottom:10px;display:flex;flex-direction:column;gap:3px">
+                  <sc-if value="{{ slide.isPaired }}" hint-placeholder-val="{{ true }}">
+                    <span style="flex:1;display:flex;align-items:flex-end;justify-content:space-between;gap:6px;width:66%;border-bottom:1px solid #c9c9c9;padding-bottom:1px">
+                      <span style="flex:1;display:flex;align-items:flex-end;gap:1px;height:100%"><span style="flex:1;height:66%;background:#2f7de1"></span><span style="flex:1;height:76%;background:#22b07d"></span></span>
+                      <span style="flex:1;display:flex;align-items:flex-end;gap:1px;height:100%"><span style="flex:1;height:50%;background:#2f7de1"></span><span style="flex:1;height:44%;background:#22b07d"></span></span>
+                      <span style="flex:1;display:flex;align-items:flex-end;gap:1px;height:100%"><span style="flex:1;height:33%;background:#2f7de1"></span><span style="flex:1;height:39%;background:#22b07d"></span></span>
+                    </span>
+                    <span style="height:9px;border:0.5px solid #c0392b;border-radius:1px;background:#fdf8ec"></span>
+                  </sc-if>
+                  <sc-if value="{{ slide.isLine }}" hint-placeholder-val="{{ false }}">
+                    <span style="flex:1;position:relative;border-bottom:1px solid #c9c9c9;border-left:1px solid #c9c9c9">
+                      <svg viewBox="0 0 100 40" preserveAspectRatio="none" style="position:absolute;inset:0;width:100%;height:100%"><polyline points="2,32 22,24 42,27 62,12 82,15 98,5" fill="none" stroke="#2f7de1" stroke-width="2"></polyline><polyline points="2,36 22,33 42,30 62,28 82,22 98,20" fill="none" stroke="#22b07d" stroke-width="2"></polyline></svg>
+                    </span>
+                  </sc-if>
+                  <sc-if value="{{ slide.isStacked }}" hint-placeholder-val="{{ false }}">
+                    <span style="flex:1;display:flex;align-items:flex-end;gap:4px;width:80%;border-bottom:1px solid #c9c9c9;padding-bottom:1px">
+                      <span style="flex:1;display:flex;flex-direction:column;justify-content:flex-end;height:70%"><span style="height:38%;background:#2f7de1"></span><span style="height:62%;background:#22b07d"></span></span>
+                      <span style="flex:1;display:flex;flex-direction:column;justify-content:flex-end;height:92%"><span style="height:52%;background:#2f7de1"></span><span style="height:48%;background:#22b07d"></span></span>
+                      <span style="flex:1;display:flex;flex-direction:column;justify-content:flex-end;height:58%"><span style="height:44%;background:#2f7de1"></span><span style="height:56%;background:#22b07d"></span></span>
+                      <span style="flex:1;display:flex;flex-direction:column;justify-content:flex-end;height:80%"><span style="height:30%;background:#2f7de1"></span><span style="height:70%;background:#22b07d"></span></span>
+                    </span>
+                  </sc-if>
+                  <sc-if value="{{ slide.isDonut }}" hint-placeholder-val="{{ false }}">
+                    <span style="flex:1;display:flex;align-items:center;gap:6px">
+                      <span style="width:30px;height:30px;border-radius:50%;background:conic-gradient(#2f7de1 0 58%,#22b07d 58% 84%,#cfd8e3 84% 100%);-webkit-mask:radial-gradient(circle,transparent 42%,#000 43%);mask:radial-gradient(circle,transparent 42%,#000 43%)"></span>
+                      <span style="flex:1;display:flex;flex-direction:column;gap:2px">
+                        <span style="height:2px;width:70%;background:#cfcfcf"></span>
+                        <span style="height:2px;width:55%;background:#cfcfcf"></span>
+                        <span style="height:2px;width:62%;background:#cfcfcf"></span>
+                      </span>
+                    </span>
+                  </sc-if>
+                </span>
+                <span style="position:absolute;left:0;right:0;bottom:0;height:5px;background:{{ accent }};opacity:0.9"></span>
+            </div>
+          </div>
+        </sc-for>
+      </div>
+    </sc-if>
+
+    <div style="flex:1;min-width:0;display:flex;align-items:safe center;justify-content:safe center;padding:26px;overflow:auto;position:relative">
+      <div style="width:100%;max-width:1060px;aspect-ratio:16/9.6;flex:none;margin:auto;background:#fff;box-shadow:0 2px 14px rgba(0,0,0,0.13);position:relative;display:flex;flex-direction:column;padding:22px 30px 0">
+        <span style="font-size:10.5px;font-weight:700;letter-spacing:1.4px;color:#8a8a8a;text-transform:uppercase">Northstar Services</span>
+        <h1 style="margin:8px 0 0;font-size:clamp(17px,2.1vw,26px);font-weight:700;letter-spacing:-0.4px;line-height:1.2;color:#1b2b3d">Revenue up €3m to €57m; only EMEA and APAC grew</h1>
+
+        <div style="display:flex;flex-direction:column;gap:14px;min-height:0;padding:22px 0 0">
+          <div style="width:62%;min-width:0;align-self:center;height:clamp(180px,34vh,300px);display:flex;flex-direction:column">
+            <div style="flex:1;display:flex;align-items:flex-end;gap:5%;border-bottom:2px solid #111;padding:0 2%">
+              <div style="flex:1;display:flex;align-items:flex-end;gap:6px;height:100%;position:relative">
+                <span style="position:absolute;top:2%;left:16%;display:flex;align-items:center;justify-content:center;width:52px;height:24px;border:1px solid #111;border-radius:50%;background:#fff;font-size:12px;font-weight:700;z-index:2">+13%</span>
+                <span style="flex:1;height:66%;background:#2f7de1;position:relative"><span style="position:absolute;top:-19px;left:0;right:0;text-align:center;font-size:13px;font-weight:600">24</span></span>
+                <span style="flex:1;height:74%;background:#22b07d;position:relative"><span style="position:absolute;top:-19px;left:0;right:0;text-align:center;font-size:13px;font-weight:600">27</span></span>
+              </div>
+              <div style="flex:1;display:flex;align-items:flex-end;gap:6px;height:100%;position:relative">
+                <span style="position:absolute;top:24%;left:16%;display:flex;align-items:center;justify-content:center;width:52px;height:24px;border:1px solid #111;border-radius:50%;background:#fff;font-size:12px;font-weight:700;z-index:2">−11%</span>
+                <span style="flex:1;height:50%;background:#2f7de1;position:relative"><span style="position:absolute;top:-19px;left:0;right:0;text-align:center;font-size:13px;font-weight:600">18</span></span>
+                <span style="flex:1;height:44%;background:#22b07d;position:relative"><span style="position:absolute;top:-19px;left:0;right:0;text-align:center;font-size:13px;font-weight:600">16</span></span>
+              </div>
+              <div style="flex:1;display:flex;align-items:flex-end;gap:6px;height:100%;position:relative">
+                <span style="position:absolute;top:33%;left:16%;display:flex;align-items:center;justify-content:center;width:52px;height:24px;border:1px solid #111;border-radius:50%;background:#fff;font-size:12px;font-weight:700;z-index:2">+17%</span>
+                <span style="flex:1;height:33%;background:#2f7de1;position:relative"><span style="position:absolute;top:-19px;left:0;right:0;text-align:center;font-size:13px;font-weight:600">12</span></span>
+                <span style="flex:1;height:39%;background:#22b07d;position:relative"><span style="position:absolute;top:-19px;left:0;right:0;text-align:center;font-size:13px;font-weight:600">14</span></span>
+              </div>
+            </div>
+            <div style="display:flex;gap:5%;padding:8px 2% 0">
+              <span style="flex:1;text-align:center;font-size:14px">EMEA</span>
+              <span style="flex:1;text-align:center;font-size:14px">Americas</span>
+              <span style="flex:1;text-align:center;font-size:14px">APAC</span>
+            </div>
+          </div>
+
+          <div style="display:flex;align-items:center;justify-content:center;gap:18px;padding-top:2px">
+            <span style="display:flex;align-items:center;gap:6px;font-size:11.5px;color:#415061"><span style="width:12px;height:12px;background:#2f7de1"></span>Q1</span>
+            <span style="display:flex;align-items:center;gap:6px;font-size:11.5px;color:#415061"><span style="width:12px;height:12px;background:#22b07d"></span>Q2</span>
+          </div>
+
+          <div style="{{ commentBoxStyle }}">
+            <div style="flex:1;min-width:0">
+            <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:9px">
+              <sc-if value="{{ hasOpenClaims }}" hint-placeholder-val="{{ true }}">
+                <p style="{{ commentLabelStyle }}">{{ commentLabel }}</p>
+                <span style="{{ flagChipStyle }}">{{ flagChipLabel }}</span>
+              </sc-if>
+
+            </div>
+            <p style="margin:0;font-size:15px;line-height:1.55;color:#2b3542;font-style:italic">
+              “<span style="{{ s1.style }}">{{ s1.text }}</span>
+              <span style="{{ s2.style }}">{{ s2.text }}</span>
+              <span style="{{ s3.style }}">{{ s3.text }}</span>”
+            </p>
+            <sc-if value="{{ allResolved }}" hint-placeholder-val="{{ false }}">
+              <div style="display:flex;justify-content:flex-end;margin-top:6px">
+                <span style="position:relative;display:flex;align-items:center">
+                  <span onMouseEnter="{{ showTip }}" onMouseLeave="{{ hideTip }}" style="{{ infoDotStyle }}">i</span>
+                  <sc-if value="{{ tipOpen }}" hint-placeholder-val="{{ false }}">
+                    <span style="position:absolute;bottom:calc(100% + 7px);right:0;z-index:5;padding:6px 9px;border-radius:5px;background:#2b3542;color:#fff;font-size:11px;font-style:normal;font-weight:500;letter-spacing:0;white-space:nowrap;box-shadow:0 2px 8px rgba(0,0,0,0.22)">Information edited last by @Maya Schmit.</span>
+                  </sc-if>
+                </span>
+              </div>
+            </sc-if>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <button style="position:absolute;right:26px;bottom:26px;width:44px;height:44px;border-radius:50%;border:0;background:#fff;box-shadow:0 2px 10px rgba(0,0,0,0.18);display:grid;place-items:center;cursor:pointer" style-hover="box-shadow:0 3px 14px rgba(0,0,0,0.25)">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#2f6fd0" stroke-width="1.6"><circle cx="12" cy="12" r="8"></circle><path d="M12 7.5v9M7.5 12h9"></path></svg>
+      </button>
+    </div>
+
+    <sc-if value="{{ assistOpen }}" hint-placeholder-val="{{ true }}">
+      <div style="width:{{ assistWidth }};flex:none;background:#fff;border-left:1px solid #dcdcdc;display:flex;flex-direction:column;min-height:0">
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;padding:11px 14px;background:#f4f4f4;border-bottom:1px solid #e0e0e0;flex:none">
+          <span style="font-size:14.5px;font-weight:600;letter-spacing:-0.2px">thinkcell Assist</span>
+          <button onClick="{{ closeAssist }}" title="Close" aria-label="Close" style="display:flex;align-items:center;justify-content:center;width:22px;height:22px;padding:0;border:0;border-radius:50%;background:#a9a9a9;cursor:pointer;flex:none;line-height:0" style-hover="background:#7d7d7d">
+            <svg width="22" height="22" viewBox="0 0 22 22" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" style="display:block"><path d="M7.6 7.6l6.8 6.8M14.4 7.6l-6.8 6.8"></path></svg>
+          </button>
+        </div>
+
+        <div style="display:flex;align-items:center;gap:6px;padding:8px 14px 0;flex:none">
+          <sc-for list="{{ assistTabs }}" as="t" hint-placeholder-count="5">
+            <button onClick="{{ t.onClick }}" title="{{ t.label }}" style="{{ t.style }}">
+              <sc-if value="{{ t.isChat }}" hint-placeholder-val="{{ true }}">
+                <svg width="22" height="22" viewBox="0 0 22 22" fill="none" stroke="{{ t.color }}" stroke-width="1.5"><path d="M2.5 4.4h10v6.6H6l-3.5 2.6z" fill="{{ t.fill }}"></path><path d="M14.4 7.6h5v6.6l-3 2.4v-2.4h-4.2" fill="{{ t.fill }}"></path></svg>
+              </sc-if>
+              <sc-if value="{{ t.isSpark }}" hint-placeholder-val="{{ false }}">
+                <svg width="22" height="22" viewBox="0 0 22 22" fill="{{ t.color }}"><path d="M14 3l1 2.6 2.6 1-2.6 1-1 2.6-1-2.6-2.6-1 2.6-1z"></path><path d="M9.6 8.2l2.2 2.2-6.4 6.4-2.2-2.2z"></path></svg>
+              </sc-if>
+              <sc-if value="{{ t.isTranslate }}" hint-placeholder-val="{{ false }}">
+                <svg width="22" height="22" viewBox="0 0 22 22" fill="none" stroke="{{ t.color }}" stroke-width="1.4"><rect x="2.6" y="2.6" width="12" height="12" rx="1.4"></rect><path d="M5.4 6.6h6.4M8.6 6.6V4.8M10 11.6c-1.8 0-3.2-1.4-3.2-3"></path><rect x="8.6" y="8.6" width="10.8" height="10.8" rx="1.4" fill="{{ t.fill }}"></rect><path d="M11.4 16.8l2.6-5.4 2.6 5.4M12.4 15.2h3.2"></path></svg>
+              </sc-if>
+              <sc-if value="{{ t.isTitles }}" hint-placeholder-val="{{ false }}">
+                <svg width="22" height="22" viewBox="0 0 22 22" fill="none" stroke="{{ t.color }}" stroke-width="1.4"><rect x="2.6" y="4" width="16.8" height="14" rx="1.6"></rect><path d="M6 8h4M6 11h9M6 14h6"></path></svg>
+              </sc-if>
+              <sc-if value="{{ t.isStats }}" hint-placeholder-val="{{ false }}">
+                <svg width="22" height="22" viewBox="0 0 22 22" fill="none" stroke="{{ t.color }}" stroke-width="1.4"><circle cx="10" cy="10" r="7"></circle><path d="M15 15l4.4 4.4M10 10l3.4-3.4M10 10l-3 3"></path></svg>
+              </sc-if>
+            </button>
+          </sc-for>
+          <div style="flex:1"></div>
+          <button style="display:grid;place-items:center;width:32px;height:34px;border:0;background:transparent;cursor:pointer">
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="#2f6fd0" stroke-width="1.5"><path d="M3 5.5h14M3 10h14M3 14.5h14"></path></svg>
+          </button>
+        </div>
+        <div style="height:1px;background:#e0e0e0;flex:none"></div>
+
+        <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:10px;padding:14px 14px 12px;border-bottom:1px solid #e6e6e6;flex:none">
+          <div style="display:flex;flex-direction:column;gap:3px">
+            <span style="font-size:14.5px;font-weight:700;letter-spacing:-0.2px">Claim Check</span>
+            <span style="font-size:12px;color:#6b6b6b">{{ claimSummary }}</span>
+          </div>
+        </div>
+
+        <div style="flex:1;overflow-y:auto;min-height:0;display:flex;flex-direction:column">
+          <sc-for list="{{ claims }}" as="c" hint-placeholder-count="3">
+            <div style="{{ c.cardStyle }}">
+              <button onClick="{{ c.onClick }}" style="display:flex;align-items:flex-start;gap:10px;width:100%;padding:12px 12px 12px 11px;border:0;background:transparent;text-align:left;cursor:pointer;border-radius:8px" style-hover="background:#fafafa">
+                <span style="{{ c.dotStyle }}"></span>
+                <span style="flex:1;min-width:0;display:flex;flex-direction:column;gap:7px">
+                  <span style="font-size:13px;line-height:1.35;color:#1b1b1b">{{ c.claim }}</span>
+                  <span style="display:flex;align-items:center;gap:7px">
+                    <span style="{{ c.badgeStyle }}">{{ c.badge }}</span>
+                    <span style="font-size:11px;color:#9a9a9a">{{ c.meta }}</span>
+                  </span>
+                </span>
+                <span style="{{ c.chevStyle }}">
+                  <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="#9a9a9a" stroke-width="1.5"><path d="M2.5 4.5L6 8l3.5-3.5"></path></svg>
+                </span>
+              </button>
+              <sc-if value="{{ c.open }}" hint-placeholder-val="{{ false }}">
+                <div style="padding:0 14px 16px;display:flex;flex-direction:column;gap:8px">
+                  <span style="font-size:10.5px;font-weight:700;letter-spacing:0.7px;color:#8a8a8a">{{ c.evidenceLabel }}</span>
+                  <span style="font-size:13px;line-height:1.4;color:#1b1b1b">{{ c.evidence }}</span>
+                  <span style="margin-top:6px;font-size:10.5px;font-weight:700;letter-spacing:0.7px;color:#8a8a8a">SUGGESTED REPLACEMENT</span>
+                  <p style="margin:0;padding:12px;border:1px solid #cfe0d2;border-radius:6px;background:#f2f8f3;font-size:13px;line-height:1.4;color:#1b1b1b">{{ c.suggestion }}</p>
+                  <button onClick="{{ c.onFix }}" style="width:100%;margin-top:6px;padding:11px;border:0;border-radius:6px;background:#245c3d;color:#fff;font-size:13px;font-weight:600;cursor:pointer" style-hover="background:#1c4a31">Fix as suggested</button>
+                  <button onClick="{{ c.onKeep }}" style="width:100%;padding:11px;border:1px solid #d5d5d5;border-radius:6px;background:#fff;font-size:13px;color:#1b1b1b;cursor:pointer" style-hover="background:#f4f4f4">Keep as it is</button>
+                </div>
+              </sc-if>
+            </div>
+          </sc-for>
+        </div>
+
+        <div style="display:flex;flex-direction:column;gap:5px;padding:12px 14px 14px;border-top:1px solid #e6e6e6;font-size:11.5px;line-height:1.4;color:#8a8a8a;flex:none">
+          <span>Checked against Regional_revenue_Q2_v3.xlsx (Finance-approved)</span>
+          <a href="#" style="align-self:flex-start;font-size:11.5px;color:#4a90e2;text-decoration:none" style-hover="text-decoration:underline">Upload another reference file</a>
+        </div>
+      </div>
+    </sc-if>
+  </div>
+
+  <div style="display:flex;align-items:center;gap:18px;height:34px;padding:0 14px;background:#f6f6f6;border-top:1px solid #e2e2e2;font-size:12px;color:#3a3a3a;flex:none">
+    <span>Slide {{ current }} of {{ total }}</span>
+    <span>English (United States)</span>
+    <span style="display:flex;align-items:center;gap:6px"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="#3a3a3a" stroke-width="1.2"><circle cx="8" cy="8" r="6"></circle><path d="M8 5.4V8l2 1.6"></path></svg>Accessibility: Investigate</span>
+    <div style="flex:1"></div>
+    <span style="display:flex;align-items:center;gap:6px"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="#3a3a3a" stroke-width="1.2"><rect x="2" y="3" width="12" height="10" rx="1"></rect><path d="M4.5 6.5h7M4.5 9.2h4"></path></svg>Notes</span>
+    <span style="display:flex;align-items:center;gap:6px"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="#3a3a3a" stroke-width="1.2"><path d="M2.5 3.5h11v7h-6l-3 2.5V10.5h-2z"></path></svg>Comments</span>
+    <div style="display:flex;align-items:center;gap:4px">
+      <button onClick="{{ toggleThumbs }}" style="{{ viewBtnActive }}"><svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="#1b1b1b" stroke-width="1.2"><rect x="1.5" y="3" width="4.5" height="10"></rect><rect x="7.5" y="3" width="7" height="10"></rect></svg></button>
+      <button style="{{ viewBtn }}"><svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="#3a3a3a" stroke-width="1.2"><rect x="1.5" y="2.5" width="5.5" height="5"></rect><rect x="9" y="2.5" width="5.5" height="5"></rect><rect x="1.5" y="8.5" width="5.5" height="5"></rect><rect x="9" y="8.5" width="5.5" height="5"></rect></svg></button>
+      <button style="{{ viewBtn }}"><svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="#3a3a3a" stroke-width="1.2"><rect x="1.5" y="3" width="8" height="10"></rect><rect x="10.5" y="3" width="4" height="4.5"></rect></svg></button>
+      <button style="{{ viewBtn }}"><svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="#3a3a3a" stroke-width="1.2"><rect x="1.5" y="3.5" width="13" height="9" rx="1"></rect><path d="M6.5 14h3"></path></svg></button>
+    </div>
+    <div style="display:flex;align-items:center;gap:9px">
+      <span style="font-size:14px;color:#3a3a3a">−</span>
+      <span style="position:relative;width:110px;height:3px;background:#c9c9c9;border-radius:2px"><span style="position:absolute;left:52%;top:-4px;width:11px;height:11px;border-radius:50%;background:#7a7a7a"></span></span>
+      <span style="font-size:14px;color:#3a3a3a">+</span>
+      <span style="width:34px;text-align:right">111%</span>
+      <svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="#3a3a3a" stroke-width="1.2"><path d="M2 6V2h4M14 6V2h-4M2 10v4h4M14 10v4h-4"></path></svg>
+    </div>
+  </div>
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1440,&quot;height&quot;:900},&quot;accent&quot;:{&quot;editor&quot;:&quot;color&quot;,&quot;default&quot;:&quot;#d62b2b&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;options&quot;:[&quot;#d62b2b&quot;,&quot;#2f6fd0&quot;,&quot;#1f7a5a&quot;,&quot;#6b4fd6&quot;],&quot;section&quot;:&quot;Theme&quot;},&quot;activeTab&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;default&quot;:&quot;thinkcell&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;options&quot;:[&quot;thinkcell&quot;,&quot;Home&quot;,&quot;Insert&quot;,&quot;Draw&quot;,&quot;Design&quot;,&quot;Transitions&quot;,&quot;Animations&quot;,&quot;Slide Show&quot;,&quot;Record&quot;,&quot;Review&quot;,&quot;View&quot;,&quot;Acrobat&quot;,&quot;Shape Format&quot;],&quot;section&quot;:&quot;Header&quot;},&quot;compactRibbon&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:false,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Header&quot;},&quot;assistOpen&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Assist panel&quot;},&quot;assistWidth&quot;:{&quot;editor&quot;:&quot;range&quot;,&quot;default&quot;:370,&quot;min&quot;:280,&quot;max&quot;:460,&quot;step&quot;:10,&quot;unit&quot;:&quot;px&quot;,&quot;tsType&quot;:&quot;number&quot;,&quot;section&quot;:&quot;Assist panel&quot;},&quot;showThumbnails&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Layout&quot;}}">
+class Component extends DCLogic {
+  state = { openClaim: -1, resolved: {}, tab: null, current: 1, assistOpen: null, thumbs: null, assistTab: 0, bold: true, autosave: false, draft: "" };
+
+  get accent() { return this.props.accent ?? "#d62b2b"; }
+  get open() { return this.state.assistOpen ?? (this.props.assistOpen ?? true); }
+  get thumbsOn() { return this.state.thumbs ?? (this.props.showThumbnails ?? true); }
+
+  renderVals() {
+    const accent = this.accent;
+    const activeTab = this.state.tab ?? (this.props.activeTab ?? "thinkcell");
+    const labels = ["thinkcell","Home","Insert","Draw","Design","Transitions","Animations","Slide Show","Record","Review","View","Acrobat","Shape Format"];
+    const tabs = labels.map(label => {
+      const on = label === activeTab;
+      return {
+        label,
+        onClick: () => this.setState({ tab: label }),
+        style: `height:24px;padding:0 ${label === "thinkcell" ? 12 : 10}px;margin-left:${label === "thinkcell" ? 4 : 0}px;border:0;border-radius:5px;background:${on ? "#ececec" : "transparent"};font-size:${label === "thinkcell" ? 13.5 : 12.5}px;font-weight:${on || label === "thinkcell" ? 700 : 400};letter-spacing:${label === "thinkcell" ? "-0.2px" : "0"};color:${on ? accent : "#2b2b2b"};cursor:pointer;white-space:nowrap`
+      };
+    });
+
+    const slideData = [
+      { n: 1, kind: "body", title: "Revenue up €3m to €57m; only EMEA and APAC grew", bars: ["60%","78%","44%","52%"] },
+      { n: 2, kind: "body", title: "Margin held at 31% despite freight costs", bars: ["82%","54%","70%","38%"] },
+      { n: 3, kind: "body", title: "Pipeline coverage is 2.4x, below the 3x target", bars: ["36%","46%","88%","64%"] },
+      { n: 4, kind: "body", title: "Headcount flat; contractor spend down €0.8m", bars: ["72%","40%","58%","90%"] }
+    ];
+    const slides = slideData.map(s => {
+      const sel = s.n === this.state.current;
+      return {
+        ...s,
+        isPaired: s.n === 1, isLine: s.n === 2, isStacked: s.n === 3, isDonut: s.n === 4,
+        onClick: () => this.setState({ current: s.n }),
+        rowStyle: "display:flex;align-items:flex-start;gap:7px;padding:5px 10px 5px 4px;cursor:pointer",
+        thumbStyle: `position:relative;flex:1;aspect-ratio:16/10;background:#fff;overflow:hidden;border:${sel ? "2px solid " + accent : "1px solid #d2d2d2"};box-shadow:0 1px 2px rgba(0,0,0,0.08)`
+      };
+    });
+
+    const claimData = [
+      { claim: "“Total revenue grew 12%”", badge: "CONTRADICTED", tone: "bad",
+        evidenceLabel: "APPROVED FIGURES SHOW",
+        evidence: "€54m → €57m = +5.6% (+9.6% like-for-like)",
+        suggestion: "“Total revenue grew 5.6% (9.6% like-for-like)”" },
+      { claim: "“All regions contributed positively”", badge: "CONTRADICTED", tone: "bad",
+        evidenceLabel: "APPROVED FIGURES SHOW",
+        evidence: "Americas: €18m → €16m (−11.1%)",
+        suggestion: "“EMEA and APAC grew; Americas declined 11.1%”" },
+      { claim: "“Retention initiatives drove the growth”", badge: "NO DATA LINKED", tone: "warn",
+        evidenceLabel: "APPROVED FIGURES SHOW",
+        evidence: "No driver data in this extract",
+        suggestion: "“Remove or mark as unverified”" }
+    ];
+    const resolved = this.state.resolved || {};
+    const palette = {
+      bad:  { bd: "#f0c2c2", bg: "#fdf1f1", fg: "#b3352f", dot: "#d2504a" },
+      warn: { bd: "#f0dcb8", bg: "#fdf7ec", fg: "#96671b", dot: "#d69a34" },
+      fixed:{ bd: "#c5ddc9", bg: "#f1f8f2", fg: "#256b3c", dot: "#3f8f5b" },
+      kept: { bd: "#dcdcdc", bg: "#f5f5f5", fg: "#6b6b6b", dot: "#b0b0b0" }
+    };
+    const metaFor = { fixed: "Replaced on slide", kept: "Kept as written" };
+    const claims = claimData.map((c, i) => {
+      const r = resolved[i];
+      const tone = r === "fixed" ? "fixed" : r === "kept" ? "kept" : c.tone;
+      const p = palette[tone];
+      const open = this.state.openClaim === i;
+      const resolve = kind => e => {
+        if (e && e.stopPropagation) e.stopPropagation();
+        this.setState({ resolved: { ...resolved, [i]: kind }, openClaim: -1 });
+      };
+      return {
+        ...c,
+        open,
+        badge: r === "fixed" ? "FIXED" : r === "kept" ? "REVIEWED" : c.badge,
+        meta: r ? metaFor[r] : "Slide " + (i + 1),
+        onClick: () => this.setState({ openClaim: open ? -1 : i }),
+        onFix: resolve("fixed"),
+        onKeep: resolve("kept"),
+        cardStyle: `flex:none;margin:8px 10px 0;border:1px solid ${open ? "#c9d7ea" : "#e6e6e6"};border-radius:8px;background:#fff;box-shadow:none;opacity:${r ? 0.82 : 1};overflow:hidden`,
+        dotStyle: `flex:none;width:8px;height:8px;margin-top:4px;border-radius:50%;background:${p.dot}`,
+        chevStyle: `flex:none;display:grid;place-items:center;width:16px;height:16px;margin-top:1px;transform:rotate(${open ? 180 : 0}deg);transition:transform .15s`,
+        badgeStyle: `flex:none;padding:3px 8px;border-radius:11px;border:1px solid ${p.bd};background:${p.bg};color:${p.fg};font-size:9.5px;font-weight:700;letter-spacing:0.5px;white-space:nowrap`
+      };
+    });
+
+    const kinds = ["isChat","isSpark","isTranslate","isTitles","isStats"];
+    const names = ["Chat","Improve","Translate","Summarize","Research"];
+    const assistTabs = kinds.map((k, i) => {
+      const on = i === this.state.assistTab;
+      const o = {
+        label: names[i],
+        color: "#2f6fd0",
+        fill: on ? "#2f6fd0" : "transparent",
+        onClick: () => this.setState({ assistTab: i }),
+        style: `display:grid;place-items:center;width:38px;height:34px;border:0;border-radius:6px 6px 0 0;border-bottom:3px solid ${on ? "#2f6fd0" : "transparent"};background:${on ? "#e6effb" : "transparent"};cursor:pointer`
+      };
+      kinds.forEach(kk => { o[kk] = false; });
+      o[k] = true;
+      return o;
+    });
+
+    const set = v => this.setState({ draft: v });
+    return {
+      accent, tabs, slides, assistTabs, claims,
+      ...(() => {
+        const draft = [
+          { orig: "Total revenue grew 12%;", fixed: "Total revenue grew 5.6% (9.6% like-for-like);", squiggle: "#c0392b" },
+          { orig: "all regions contributed positively.", fixed: "EMEA and APAC grew; Americas declined 11.1%.", squiggle: "#c0392b" },
+          { orig: "Retention initiatives drove the growth.", fixed: "Growth drivers are unverified in this extract.", squiggle: "#9a9a9a" }
+        ];
+        const out = {};
+        draft.forEach((d, i) => {
+          const r = resolved[i];
+          out["s" + (i + 1)] = {
+            text: r === "fixed" ? d.fixed : d.orig,
+            style: r === "fixed"
+              ? "color:#1b2b3d;font-style:normal;font-weight:600"
+              : r === "kept"
+                ? "color:#1b2b3d;font-style:normal"
+                : `text-decoration:underline wavy ${d.squiggle};text-underline-offset:4px`
+          };
+        });
+        const open = draft.filter((d, i) => !resolved[i]).length;
+        out.flagChipLabel = open === 0 ? "ALL CLAIMS RESOLVED" : open + (open === 1 ? " CLAIM FLAGGED" : " CLAIMS FLAGGED");
+        out.flagChipStyle = "flex:none;padding:3px 9px;border-radius:11px;font-size:9.5px;font-weight:700;letter-spacing:0.5px;white-space:nowrap;background:#fbe9e6;border:1px solid #edc4bd;color:#b3352f";
+        out.hasOpenClaims = open > 0;
+        out.allResolved = open === 0;
+        out.tipOpen = !!this.state.tip;
+        out.showTip = () => this.setState({ tip: true });
+        out.hideTip = () => this.setState({ tip: false });
+        out.infoDotStyle = `display:grid;place-items:center;width:18px;height:18px;border-radius:50%;border:1px solid ${this.state.tip ? "#7d7669" : "#c8c2b4"};color:#9a9285;font-size:10.5px;font-weight:700;font-style:normal;font-family:Georgia,serif;cursor:default;opacity:${this.state.tip ? 1 : 0.7}`;
+        out.commentLabel = open ? "Comment — added by @James Morrisson, unapproved" : "Comment — edited last by @Maya Schmit, approved";
+        out.commentLabelStyle = `margin:0;font-size:10.5px;font-weight:700;letter-spacing:0.9px;text-transform:uppercase;color:${open ? "#b07a1e" : "#256b3c"}`;
+        out.commentBoxStyle = `position:relative;display:flex;gap:13px;border:1px solid ${open ? "#e3b7ad" : "#e0dcd2"};${open ? "border-left:4px solid #c0392b;" : ""}border-radius:8px;background:linear-gradient(180deg,#fdfaf2,#fbf3e4);box-shadow:0 1px 3px rgba(120,60,20,0.08);padding:14px 18px 16px ${open ? 16 : 18}px`;
+        return out;
+      })(),
+      claimSummary: (() => {
+        const left = claims.filter(c => !resolved[claims.indexOf(c)]).length;
+        return left === 0 ? "All 3 items reviewed — ready to send to Finance"
+          : left + (left === 1 ? " item" : " items") + " to review before sending to Finance";
+      })(),
+      current: this.state.current, total: slides.length,
+      assistOpen: this.open,
+      showThumbnails: this.thumbsOn,
+      assistWidth: "min(" + (this.props.assistWidth ?? 370) + "px, 34vw)",
+      ribbonHeight: (this.props.compactRibbon ? 62 : 74) + "px",
+      draft: this.state.draft,
+      sendColor: this.state.draft ? "#2f6fd0" : "#b6b6b6",
+      onDraft: e => set(e.target.value),
+      pickTask: () => set("Edit and organize text"),
+      pickPromptA: () => set("Create an executive summary slide for my presentation"),
+      pickPromptB: () => set("Translate the selected slides to French"),
+      pickPromptC: () => set("Company analysis for Siemens companies"),
+      assistBtnStyle: `display:flex;flex-direction:column;align-items:center;gap:3px;width:54px;padding:4px 0;margin-left:2px;border:1px solid ${this.open ? "#a9c3e8" : "transparent"};border-radius:5px;background:${this.open ? "#e6effb" : "transparent"};font-size:11.5px;font-weight:${this.open ? 600 : 400};color:#1b1b1b;cursor:pointer`,
+      openAssist: () => this.setState({ assistOpen: !this.open }),
+      closeAssist: e => { if (e && e.stopPropagation) e.stopPropagation(); this.setState({ assistOpen: false }); },
+      toggleThumbs: () => this.setState({ thumbs: !this.thumbsOn }),
+      toggleBold: () => this.setState({ bold: !this.state.bold }),
+      boldStyle: `display:grid;place-items:center;width:23px;height:21px;border:1px solid ${this.state.bold ? "#c5d6ee" : "transparent"};border-radius:4px;background:${this.state.bold ? "#e3edfb" : "transparent"};font-size:12.5px;font-weight:700;cursor:pointer`,
+      toggleAutosave: () => this.setState({ autosave: !this.state.autosave }),
+      autosaveTrackStyle: `position:relative;width:34px;height:18px;border-radius:9px;border:0;padding:0;cursor:pointer;background:${this.state.autosave ? "#34c759" : "#c9c9c9"};transition:background .15s`,
+      autosaveKnobStyle: `position:absolute;top:2px;left:${this.state.autosave ? 18 : 2}px;width:14px;height:14px;border-radius:50%;background:#fff;box-shadow:0 1px 2px rgba(0,0,0,0.3);transition:left .15s`,
+      viewBtn: "display:grid;place-items:center;width:26px;height:22px;border:0;border-radius:4px;background:transparent;cursor:pointer",
+      viewBtnActive: `display:grid;place-items:center;width:26px;height:22px;border:0;border-radius:4px;background:${this.thumbsOn ? "#dcdcdc" : "transparent"};cursor:pointer`
+    };
+  }
+}
+</script>
+</body>
+</html>
