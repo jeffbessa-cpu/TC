@@ -1,0 +1,811 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Claim Check — think-cell case study prototype</title>
+<style>
+  body { margin:0; font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif; background:#e9e9e7; }
+  .stepper-wrap { background:#fff; border-bottom:1px solid #e3e1df; padding:18px 48px 22px; }
+  .stepper-title { font-size:11px; font-weight:600; letter-spacing:.08em; text-transform:uppercase; color:#a5a29d; margin:0 0 14px; }
+  .stepper { display:flex; align-items:center; }
+  .info-hover { z-index:15; }
+  .info-icon { width:22px; height:22px; border-radius:50%; background:#2f6fed; color:#fff; font-size:12px; font-weight:700; font-style:italic; display:flex; align-items:center; justify-content:center; cursor:default; box-shadow:0 2px 6px rgba(0,0,0,.18); }
+  .info-menu { display:none; position:absolute; background:transparent; width:260px; z-index:20; padding-top:16px; box-sizing:content-box; }
+  .info-menu-inner { background:#fff; border:1px solid #e3e1df; border-radius:10px; box-shadow:0 8px 24px rgba(0,0,0,.15); padding:6px 0; }
+  .info-hover:hover .info-menu { display:block; }
+</style>
+</head>
+<body>
+<div class="stepper-wrap">
+  <div style="display:flex;align-items:center;justify-content:space-between;">
+    <p class="stepper-title" style="margin:0 0 14px;">Prototype guidance</p>
+    <button onclick="resetPrototype()" style="display:flex;align-items:center;gap:6px;background:#fff;border:1px solid #d6d3d1;border-radius:20px;padding:7px 14px;font-size:12.5px;font-weight:600;color:#5b5955;cursor:pointer;margin-bottom:14px;">
+      <span style="font-size:13px;">&#8635;</span>Restart prototype
+    </button>
+  </div>
+  <div class="stepper"><div onclick="goToStep(1)" style="display:flex;align-items:center;gap:10px;cursor:pointer;">
+      <div id="stepdot1" style="width:30px;height:30px;border-radius:50%;background:#c0392b;color:#fff;font-size:14px;font-weight:700;display:flex;align-items:center;justify-content:center;">1</div>
+      <div id="steplabel1" style="font-size:13.5px;font-weight:600;color:#22201e;">Graph only</div>
+    </div><div style="flex:1;height:2px;background:#e3e1df;margin:0 8px;align-self:center;"></div><div onclick="goToStep(2)" style="display:flex;align-items:center;gap:10px;cursor:pointer;">
+      <div id="stepdot2" style="width:30px;height:30px;border-radius:50%;background:#c7c4c0;color:#fff;font-size:14px;font-weight:700;display:flex;align-items:center;justify-content:center;">2</div>
+      <div id="steplabel2" style="font-size:13.5px;font-weight:600;color:#8a8783;">Draft commentary pasted</div>
+    </div><div style="flex:1;height:2px;background:#e3e1df;margin:0 8px;align-self:center;"></div><div onclick="goToStep(3)" style="display:flex;align-items:center;gap:10px;cursor:pointer;">
+      <div id="stepdot3" style="width:30px;height:30px;border-radius:50%;background:#c7c4c0;color:#fff;font-size:14px;font-weight:700;display:flex;align-items:center;justify-content:center;">3</div>
+      <div id="steplabel3" style="font-size:13.5px;font-weight:600;color:#8a8783;">Claim Check results</div>
+    </div><div style="flex:1;height:2px;background:#e3e1df;margin:0 8px;align-self:center;"></div><div onclick="goToStep(4)" style="display:flex;align-items:center;gap:10px;cursor:pointer;">
+      <div id="stepdot4" style="width:30px;height:30px;border-radius:50%;background:#c7c4c0;color:#fff;font-size:14px;font-weight:700;display:flex;align-items:center;justify-content:center;">4</div>
+      <div id="steplabel4" style="font-size:13.5px;font-weight:600;color:#8a8783;">All checks solved</div>
+    </div></div>
+</div>
+<div id="step1" class="steppanel" style="display:flex;flex-direction:column;align-items:center;padding:32px;"><div style="width:1300px;box-sizing:border-box;display:flex;flex-direction:column;background:#faf9f8;border:1px solid #d6d3d1;border-radius:8px;overflow:hidden;">
+  
+<div style="height:32px;background:#2b2b2b;display:flex;align-items:center;padding:0 12px;color:#e5e5e5;font-size:12px;">
+  Regional_revenue_Q2_v3.pptx &mdash; PowerPoint
+</div>
+<div style="height:34px;background:#faf9f8;border-bottom:1px solid #e3e1df;display:flex;align-items:flex-end;gap:2px;padding:0 12px;font-size:13px;color:#5b5955;">
+  <div style="padding:8px 10px;">File</div><div style="padding:8px 10px;">Home</div><div style="padding:8px 10px;">Insert</div>
+  <div style="padding:8px 10px;">Design</div><div style="padding:8px 10px;">Transitions</div><div style="padding:8px 10px;">Review</div>
+  <div style="padding:8px 10px 6px;border-bottom:2px solid #c0392b;color:#c0392b;font-weight:600;">think-cell</div>
+</div>
+<div style="height:56px;background:#fff;border-bottom:1px solid #e3e1df;display:flex;align-items:center;gap:16px;padding:0 16px;overflow-x:auto;">
+      <div style="display:flex;flex-direction:column;align-items:center;gap:4px;"><div style="display:flex;gap:5px;"><div style="width:26px;height:26px;border-radius:6px;background:#f2f1ef;"></div></div><div style="font-size:9.5px;color:#8a8783;white-space:nowrap;">New Slide</div></div>
+      <div style="display:flex;flex-direction:column;align-items:center;gap:4px;"><div style="display:flex;gap:5px;"><div style="width:26px;height:26px;border-radius:6px;background:#f2f1ef;"></div></div><div style="font-size:9.5px;color:#8a8783;white-space:nowrap;">Paste</div></div>
+      <div style="width:1px;height:32px;background:#e3e1df;flex:0 0 auto;"></div>
+      <div style="display:flex;flex-direction:column;align-items:center;gap:4px;"><div style="display:flex;gap:5px;"><div style="width:26px;height:26px;border-radius:6px;background:#f2f1ef;"></div></div><div style="font-size:9.5px;color:#8a8783;white-space:nowrap;">Library</div></div>
+      <div style="display:flex;flex-direction:column;align-items:center;gap:4px;"><div style="display:flex;gap:5px;"><div style="width:26px;height:26px;border-radius:6px;background:#f2f1ef;"></div></div><div style="font-size:9.5px;color:#8a8783;white-space:nowrap;">Agenda</div></div>
+      <div style="width:1px;height:32px;background:#e3e1df;flex:0 0 auto;"></div>
+      <div style="display:flex;flex-direction:column;align-items:center;gap:4px;">
+        <div style="display:flex;align-items:center;gap:6px;background:#eef4ff;border:1px solid #bcd4fb;border-radius:6px;padding:4px 10px;"><span style="font-size:14px;">&#10024;</span><span style="font-size:11px;font-weight:600;color:#2f6fed;">Assist</span></div>
+      </div>
+      <div style="display:flex;flex-direction:column;align-items:center;gap:4px;"><div style="display:flex;gap:5px;"><div style="width:26px;height:26px;border-radius:6px;background:#f2f1ef;"></div></div><div style="font-size:9.5px;color:#8a8783;white-space:nowrap;">Charts</div></div>
+      <div style="display:flex;flex-direction:column;align-items:center;gap:4px;"><div style="display:flex;gap:5px;"><div style="width:26px;height:26px;border-radius:6px;background:#f2f1ef;"></div></div><div style="font-size:9.5px;color:#8a8783;white-space:nowrap;">Table</div></div>
+      <div style="width:1px;height:32px;background:#e3e1df;flex:0 0 auto;"></div>
+      <div style="display:flex;flex-direction:column;align-items:center;gap:4px;"><div style="display:flex;gap:5px;"><div style="width:26px;height:26px;border-radius:6px;background:#f2f1ef;"></div></div><div style="font-size:9.5px;color:#8a8783;white-space:nowrap;">Shapes</div></div>
+      <div style="display:flex;flex-direction:column;align-items:center;gap:4px;"><div style="display:flex;gap:5px;"><div style="width:26px;height:26px;border-radius:6px;background:#f2f1ef;"></div></div><div style="font-size:9.5px;color:#8a8783;white-space:nowrap;">Images</div></div>
+      <div style="width:1px;height:32px;background:#e3e1df;flex:0 0 auto;"></div>
+      <div style="display:flex;flex-direction:column;align-items:center;gap:4px;"><div style="display:flex;gap:5px;"><div style="width:26px;height:26px;border-radius:6px;background:#f2f1ef;"></div></div><div style="font-size:9.5px;color:#8a8783;white-space:nowrap;">Data Links</div></div>
+      <div style="display:flex;flex-direction:column;align-items:center;gap:4px;"><div style="display:flex;gap:5px;"><div style="width:26px;height:26px;border-radius:6px;background:#f2f1ef;"></div></div><div style="font-size:9.5px;color:#8a8783;white-space:nowrap;">Slide Workbook</div></div>
+      <div style="display:flex;flex-direction:column;align-items:center;gap:4px;"><div style="display:flex;gap:5px;"><div style="width:26px;height:26px;border-radius:6px;background:#f2f1ef;"></div></div><div style="font-size:9.5px;color:#8a8783;white-space:nowrap;">New Excel Link</div></div>
+      <div style="width:1px;height:32px;background:#e3e1df;flex:0 0 auto;"></div>
+      <div style="display:flex;flex-direction:column;align-items:center;gap:4px;"><div style="display:flex;gap:5px;"><div style="width:26px;height:26px;border-radius:6px;background:#f2f1ef;"></div></div><div style="font-size:9.5px;color:#8a8783;white-space:nowrap;">Comment</div></div>
+      <div style="display:flex;flex-direction:column;align-items:center;gap:4px;"><div style="display:flex;gap:5px;"><div style="width:26px;height:26px;border-radius:6px;background:#f2f1ef;"></div></div><div style="font-size:9.5px;color:#8a8783;white-space:nowrap;">Send Slides</div></div>
+      <div style="display:flex;flex-direction:column;align-items:center;gap:4px;"><div style="display:flex;gap:5px;"><div style="width:26px;height:26px;border-radius:6px;background:#f2f1ef;"></div></div><div style="font-size:9.5px;color:#8a8783;white-space:nowrap;">Save Slides</div></div>
+      <div style="width:1px;height:32px;background:#e3e1df;flex:0 0 auto;"></div>
+      <div style="display:flex;flex-direction:column;align-items:center;gap:4px;"><div style="display:flex;gap:5px;"><div style="width:26px;height:26px;border-radius:6px;background:#f2f1ef;"></div></div><div style="font-size:9.5px;color:#8a8783;white-space:nowrap;">Swap Objects</div></div>
+      <div style="display:flex;flex-direction:column;align-items:center;gap:4px;"><div style="display:flex;gap:5px;"><div style="width:26px;height:26px;border-radius:6px;background:#f2f1ef;"></div></div><div style="font-size:9.5px;color:#8a8783;white-space:nowrap;">Shape Outline</div></div>
+    </div>
+  <div style="display:flex;min-height:620px;"><div style="width:120px;background:#efedeb;border-right:1px solid #e3e1df;padding:10px 0;display:flex;flex-direction:column;align-items:center;gap:10px;">
+      <div style="width:96px;height:54px;background:#fff;border:1px solid #d6d3d1;border-radius:2px;"></div>
+      <div style="width:96px;height:54px;background:#fff;border:1px solid #d6d3d1;border-radius:2px;"></div>
+      <div style="width:96px;height:54px;background:#fff;border:2px solid #c0392b;border-radius:2px;"></div>
+      <div style="width:96px;height:54px;background:#fff;border:1px solid #d6d3d1;border-radius:2px;"></div>
+    </div><div style="flex:1;background:#dedcd9;display:flex;align-items:center;justify-content:center;padding:24px;min-width:0;"><div style="width:1060px;height:600px;background:#fff;box-shadow:0 1px 4px rgba(0,0,0,.15);position:relative;padding:40px 48px;box-sizing:border-box;">
+  <div style="font-size:11px;letter-spacing:.06em;color:#9a9793;text-transform:uppercase;margin-bottom:4px;">Northstar Services</div>
+  <div style="font-size:22px;font-weight:600;color:#22201e;margin-bottom:18px;">Revenue up &euro;3m to &euro;57m; only EMEA and APAC grew</div>
+  
+      <div style="position:relative;">
+      <div style="display:flex;gap:8px;align-items:flex-end;">
+          <div style="display:flex;flex-direction:column;align-items:center;width:150px;">
+            <div style="display:flex;align-items:flex-end;gap:8px;height:190px;">
+              <div style="display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:190px;">
+                <div style="font-size:13px;font-weight:600;color:#4a4844;margin-bottom:4px;">24</div>
+                <div style="width:44px;height:152px;background:#b9c4d6;"></div>
+              </div>
+              <div style="display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:190px;">
+                <div style="font-size:13px;font-weight:600;color:#22344d;margin-bottom:4px;">27</div>
+                <div style="width:44px;height:171px;background:#3b5b8c;"></div>
+              </div>
+            </div>
+            <div style="margin-top:8px;font-size:14px;color:#4a4844;">EMEA</div>
+          </div>
+        
+          <div style="display:flex;flex-direction:column;align-items:center;width:150px;">
+            <div style="display:flex;align-items:flex-end;gap:8px;height:190px;">
+              <div style="display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:190px;">
+                <div style="font-size:13px;font-weight:600;color:#4a4844;margin-bottom:4px;">18</div>
+                <div style="width:44px;height:114px;background:#b9c4d6;"></div>
+              </div>
+              <div style="display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:190px;">
+                <div style="font-size:13px;font-weight:600;color:#22344d;margin-bottom:4px;">16</div>
+                <div style="width:44px;height:101px;background:#3b5b8c;"></div>
+              </div>
+            </div>
+            <div style="margin-top:8px;font-size:14px;color:#4a4844;">Americas</div>
+          </div>
+        
+          <div style="display:flex;flex-direction:column;align-items:center;width:150px;">
+            <div style="display:flex;align-items:flex-end;gap:8px;height:190px;">
+              <div style="display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:190px;">
+                <div style="font-size:13px;font-weight:600;color:#4a4844;margin-bottom:4px;">12</div>
+                <div style="width:44px;height:76px;background:#b9c4d6;"></div>
+              </div>
+              <div style="display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:190px;">
+                <div style="font-size:13px;font-weight:600;color:#22344d;margin-bottom:4px;">14</div>
+                <div style="width:44px;height:89px;background:#3b5b8c;"></div>
+              </div>
+            </div>
+            <div style="margin-top:8px;font-size:14px;color:#4a4844;">APAC</div>
+          </div>
+        </div>
+      <div style="display:flex;gap:16px;margin-top:12px;font-size:12px;color:#6b6863;">
+        <div style="display:flex;align-items:center;gap:5px;"><div style="width:11px;height:11px;background:#b9c4d6;"></div>Q1</div>
+        <div style="display:flex;align-items:center;gap:5px;"><div style="width:11px;height:11px;background:#3b5b8c;"></div>Q2</div>
+      </div>
+      
+      </div>
+    
+  <div onclick="goToStep(2)" style="margin-top:26px;padding:22px 16px;border:2px dashed #9ecb9e;border-radius:6px;text-align:center;cursor:pointer;background:#eef8ec;" onmouseover="this.style.background='#e3f4df'" onmouseout="this.style.background='#eef8ec'">
+    <span style="font-size:13.5px;color:#3f7a4f;font-style:italic;">Maya is about to paste draft commentary here&hellip; click to continue</span>
+  </div>
+</div></div>
+<div style="width:320px;background:#fff;border-left:1px solid #e3e1df;display:flex;flex-direction:column;">
+  <div style="padding:16px 18px 12px;border-bottom:1px solid #efedeb;display:flex;align-items:center;justify-content:space-between;">
+      <div style="font-size:15px;font-weight:700;color:#22201e;">thinkcell Assist</div>
+      <div style="color:#8a8783;font-size:16px;">&times;</div>
+    </div>
+    <div style="display:flex;gap:20px;padding:12px 18px;border-bottom:1px solid #efedeb;">
+      <div style="color:#2f6fed;">&#128172;</div><div style="color:#5b5955;">&#10024;</div><div style="color:#5b5955;">&#128209;</div>
+      <div style="color:#5b5955;">&#128203;</div><div style="color:#5b5955;">&#128269;</div><div style="color:#5b5955;margin-left:auto;">&#9776;</div>
+    </div>
+  <div style="flex:1;overflow:auto;padding:16px 18px;">
+    <p style="font-size:12.5px;color:#8a8783;margin:0 0 14px;">Select a task or prompt idea.</p>
+    <div style="display:flex;align-items:center;gap:12px;background:#f7f9fc;border:1px solid #e3e9f2;border-radius:8px;padding:12px 14px;margin-bottom:10px;">
+      <span style="color:#2f6fed;font-size:15px;">&#10024;</span><span style="font-size:13px;color:#22201e;font-weight:500;">Edit and organize text</span>
+    </div>
+    <div style="display:flex;align-items:center;gap:12px;background:#f7f9fc;border:1px solid #e3e9f2;border-radius:8px;padding:12px 14px;margin-bottom:10px;">
+      <span style="color:#2f6fed;font-size:15px;">&#128441;</span><span style="font-size:13px;color:#22201e;font-weight:500;">Translate your slides</span>
+    </div>
+    <div style="display:flex;align-items:center;gap:12px;background:#f7f9fc;border:1px solid #e3e9f2;border-radius:8px;padding:12px 14px;margin-bottom:10px;">
+      <span style="color:#2f6fed;font-size:15px;">&#128221;</span><span style="font-size:13px;color:#22201e;font-weight:500;">Create titles and summaries</span>
+    </div>
+    <div style="display:flex;align-items:center;gap:12px;background:#f7f9fc;border:1px solid #e3e9f2;border-radius:8px;padding:12px 14px;margin-bottom:10px;">
+      <span style="color:#2f6fed;font-size:15px;">&#128269;</span><span style="font-size:13px;color:#22201e;font-weight:500;">Find stats and financial data</span>
+    </div>
+    <div onclick="goToStep(3)" style="display:flex;align-items:center;gap:12px;background:#fdeceb;border:1px solid #e8a8a2;border-radius:8px;padding:12px 14px;margin-bottom:10px;cursor:pointer;">
+      <span style="color:#c0392b;font-size:15px;">&#10024;</span><span style="font-size:13px;color:#c0392b;font-weight:700;">Check information against linked data</span>
+    </div>
+    <p style="font-size:11px;font-weight:700;color:#9a9793;text-transform:uppercase;letter-spacing:.04em;margin:20px 0 10px;">Prompt ideas</p>
+    <div style="background:#eef4ff;border:1px solid #cddcfb;border-radius:8px;padding:10px 12px;margin-bottom:8px;font-size:12.5px;color:#2f6fed;">Latest global M&amp;A activity this quarter</div>
+    <div style="background:#eef4ff;border:1px solid #cddcfb;border-radius:8px;padding:10px 12px;margin-bottom:8px;font-size:12.5px;color:#2f6fed;">What is the quarterly gross profit trend for Amazon.com?</div>
+    <div style="background:#eef4ff;border:1px solid #cddcfb;border-radius:8px;padding:10px 12px;margin-bottom:8px;font-size:12.5px;color:#2f6fed;">Suggest compelling action titles for my slide</div>
+  </div>
+  <div style="border-top:1px solid #efedeb;padding:12px 18px;">
+      <div style="display:flex;align-items:center;gap:8px;border:1px solid #e3e1df;border-radius:20px;padding:9px 14px;">
+        <span style="color:#8a8783;">&#128206;</span><span style="color:#a5a29d;font-size:12.5px;flex:1;">Ask thinkcell Assist&hellip;</span><span style="color:#c0392b;">&#10148;</span>
+      </div>
+      <div style="text-align:center;font-size:10px;color:#c3c0bc;margin-top:6px;">Powered by AI</div>
+    </div>
+</div>
+</div>
+</div></div><div id="step2" class="steppanel" style="display:none;flex-direction:column;align-items:center;padding:32px;"><div style="width:1300px;box-sizing:border-box;display:flex;flex-direction:column;background:#faf9f8;border:1px solid #d6d3d1;border-radius:8px;overflow:hidden;">
+  
+<div style="height:32px;background:#2b2b2b;display:flex;align-items:center;padding:0 12px;color:#e5e5e5;font-size:12px;">
+  Regional_revenue_Q2_v3.pptx &mdash; PowerPoint
+</div>
+<div style="height:34px;background:#faf9f8;border-bottom:1px solid #e3e1df;display:flex;align-items:flex-end;gap:2px;padding:0 12px;font-size:13px;color:#5b5955;">
+  <div style="padding:8px 10px;">File</div><div style="padding:8px 10px;">Home</div><div style="padding:8px 10px;">Insert</div>
+  <div style="padding:8px 10px;">Design</div><div style="padding:8px 10px;">Transitions</div><div style="padding:8px 10px;">Review</div>
+  <div style="padding:8px 10px 6px;border-bottom:2px solid #c0392b;color:#c0392b;font-weight:600;">think-cell</div>
+</div>
+<div style="height:56px;background:#fff;border-bottom:1px solid #e3e1df;display:flex;align-items:center;gap:16px;padding:0 16px;overflow-x:auto;">
+      <div style="display:flex;flex-direction:column;align-items:center;gap:4px;"><div style="display:flex;gap:5px;"><div style="width:26px;height:26px;border-radius:6px;background:#f2f1ef;"></div></div><div style="font-size:9.5px;color:#8a8783;white-space:nowrap;">New Slide</div></div>
+      <div style="display:flex;flex-direction:column;align-items:center;gap:4px;"><div style="display:flex;gap:5px;"><div style="width:26px;height:26px;border-radius:6px;background:#f2f1ef;"></div></div><div style="font-size:9.5px;color:#8a8783;white-space:nowrap;">Paste</div></div>
+      <div style="width:1px;height:32px;background:#e3e1df;flex:0 0 auto;"></div>
+      <div style="display:flex;flex-direction:column;align-items:center;gap:4px;"><div style="display:flex;gap:5px;"><div style="width:26px;height:26px;border-radius:6px;background:#f2f1ef;"></div></div><div style="font-size:9.5px;color:#8a8783;white-space:nowrap;">Library</div></div>
+      <div style="display:flex;flex-direction:column;align-items:center;gap:4px;"><div style="display:flex;gap:5px;"><div style="width:26px;height:26px;border-radius:6px;background:#f2f1ef;"></div></div><div style="font-size:9.5px;color:#8a8783;white-space:nowrap;">Agenda</div></div>
+      <div style="width:1px;height:32px;background:#e3e1df;flex:0 0 auto;"></div>
+      <div style="display:flex;flex-direction:column;align-items:center;gap:4px;">
+        <div style="display:flex;align-items:center;gap:6px;background:#eef4ff;border:1px solid #bcd4fb;border-radius:6px;padding:4px 10px;"><span style="font-size:14px;">&#10024;</span><span style="font-size:11px;font-weight:600;color:#2f6fed;">Assist</span></div>
+      </div>
+      <div style="display:flex;flex-direction:column;align-items:center;gap:4px;"><div style="display:flex;gap:5px;"><div style="width:26px;height:26px;border-radius:6px;background:#f2f1ef;"></div></div><div style="font-size:9.5px;color:#8a8783;white-space:nowrap;">Charts</div></div>
+      <div style="display:flex;flex-direction:column;align-items:center;gap:4px;"><div style="display:flex;gap:5px;"><div style="width:26px;height:26px;border-radius:6px;background:#f2f1ef;"></div></div><div style="font-size:9.5px;color:#8a8783;white-space:nowrap;">Table</div></div>
+      <div style="width:1px;height:32px;background:#e3e1df;flex:0 0 auto;"></div>
+      <div style="display:flex;flex-direction:column;align-items:center;gap:4px;"><div style="display:flex;gap:5px;"><div style="width:26px;height:26px;border-radius:6px;background:#f2f1ef;"></div></div><div style="font-size:9.5px;color:#8a8783;white-space:nowrap;">Shapes</div></div>
+      <div style="display:flex;flex-direction:column;align-items:center;gap:4px;"><div style="display:flex;gap:5px;"><div style="width:26px;height:26px;border-radius:6px;background:#f2f1ef;"></div></div><div style="font-size:9.5px;color:#8a8783;white-space:nowrap;">Images</div></div>
+      <div style="width:1px;height:32px;background:#e3e1df;flex:0 0 auto;"></div>
+      <div style="display:flex;flex-direction:column;align-items:center;gap:4px;"><div style="display:flex;gap:5px;"><div style="width:26px;height:26px;border-radius:6px;background:#f2f1ef;"></div></div><div style="font-size:9.5px;color:#8a8783;white-space:nowrap;">Data Links</div></div>
+      <div style="display:flex;flex-direction:column;align-items:center;gap:4px;"><div style="display:flex;gap:5px;"><div style="width:26px;height:26px;border-radius:6px;background:#f2f1ef;"></div></div><div style="font-size:9.5px;color:#8a8783;white-space:nowrap;">Slide Workbook</div></div>
+      <div style="display:flex;flex-direction:column;align-items:center;gap:4px;"><div style="display:flex;gap:5px;"><div style="width:26px;height:26px;border-radius:6px;background:#f2f1ef;"></div></div><div style="font-size:9.5px;color:#8a8783;white-space:nowrap;">New Excel Link</div></div>
+      <div style="width:1px;height:32px;background:#e3e1df;flex:0 0 auto;"></div>
+      <div style="display:flex;flex-direction:column;align-items:center;gap:4px;"><div style="display:flex;gap:5px;"><div style="width:26px;height:26px;border-radius:6px;background:#f2f1ef;"></div></div><div style="font-size:9.5px;color:#8a8783;white-space:nowrap;">Comment</div></div>
+      <div style="display:flex;flex-direction:column;align-items:center;gap:4px;"><div style="display:flex;gap:5px;"><div style="width:26px;height:26px;border-radius:6px;background:#f2f1ef;"></div></div><div style="font-size:9.5px;color:#8a8783;white-space:nowrap;">Send Slides</div></div>
+      <div style="display:flex;flex-direction:column;align-items:center;gap:4px;"><div style="display:flex;gap:5px;"><div style="width:26px;height:26px;border-radius:6px;background:#f2f1ef;"></div></div><div style="font-size:9.5px;color:#8a8783;white-space:nowrap;">Save Slides</div></div>
+      <div style="width:1px;height:32px;background:#e3e1df;flex:0 0 auto;"></div>
+      <div style="display:flex;flex-direction:column;align-items:center;gap:4px;"><div style="display:flex;gap:5px;"><div style="width:26px;height:26px;border-radius:6px;background:#f2f1ef;"></div></div><div style="font-size:9.5px;color:#8a8783;white-space:nowrap;">Swap Objects</div></div>
+      <div style="display:flex;flex-direction:column;align-items:center;gap:4px;"><div style="display:flex;gap:5px;"><div style="width:26px;height:26px;border-radius:6px;background:#f2f1ef;"></div></div><div style="font-size:9.5px;color:#8a8783;white-space:nowrap;">Shape Outline</div></div>
+    </div>
+  <div style="display:flex;min-height:620px;"><div style="width:120px;background:#efedeb;border-right:1px solid #e3e1df;padding:10px 0;display:flex;flex-direction:column;align-items:center;gap:10px;">
+      <div style="width:96px;height:54px;background:#fff;border:1px solid #d6d3d1;border-radius:2px;"></div>
+      <div style="width:96px;height:54px;background:#fff;border:1px solid #d6d3d1;border-radius:2px;"></div>
+      <div style="width:96px;height:54px;background:#fff;border:2px solid #c0392b;border-radius:2px;"></div>
+      <div style="width:96px;height:54px;background:#fff;border:1px solid #d6d3d1;border-radius:2px;"></div>
+    </div><div style="flex:1;background:#dedcd9;display:flex;align-items:center;justify-content:center;padding:24px;min-width:0;"><div style="width:1060px;height:600px;background:#fff;box-shadow:0 1px 4px rgba(0,0,0,.15);position:relative;padding:40px 48px;box-sizing:border-box;">
+  <div style="font-size:11px;letter-spacing:.06em;color:#9a9793;text-transform:uppercase;margin-bottom:4px;">Northstar Services</div>
+  <div style="font-size:22px;font-weight:600;color:#22201e;margin-bottom:18px;">Revenue up &euro;3m to &euro;57m; only EMEA and APAC grew</div>
+  
+      <div style="position:relative;">
+      <div style="display:flex;gap:8px;align-items:flex-end;">
+          <div style="display:flex;flex-direction:column;align-items:center;width:150px;">
+            <div style="display:flex;align-items:flex-end;gap:8px;height:190px;">
+              <div style="display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:190px;">
+                <div style="font-size:13px;font-weight:600;color:#4a4844;margin-bottom:4px;">24</div>
+                <div style="width:44px;height:152px;background:#b9c4d6;"></div>
+              </div>
+              <div style="display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:190px;">
+                <div style="font-size:13px;font-weight:600;color:#22344d;margin-bottom:4px;">27</div>
+                <div style="width:44px;height:171px;background:#3b5b8c;"></div>
+              </div>
+            </div>
+            <div style="margin-top:8px;font-size:14px;color:#4a4844;">EMEA</div>
+          </div>
+        
+          <div style="display:flex;flex-direction:column;align-items:center;width:150px;">
+            <div style="display:flex;align-items:flex-end;gap:8px;height:190px;">
+              <div style="display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:190px;">
+                <div style="font-size:13px;font-weight:600;color:#4a4844;margin-bottom:4px;">18</div>
+                <div style="width:44px;height:114px;background:#b9c4d6;"></div>
+              </div>
+              <div style="display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:190px;">
+                <div style="font-size:13px;font-weight:600;color:#22344d;margin-bottom:4px;">16</div>
+                <div style="width:44px;height:101px;background:#3b5b8c;"></div>
+              </div>
+            </div>
+            <div style="margin-top:8px;font-size:14px;color:#4a4844;">Americas</div>
+          </div>
+        
+          <div style="display:flex;flex-direction:column;align-items:center;width:150px;">
+            <div style="display:flex;align-items:flex-end;gap:8px;height:190px;">
+              <div style="display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:190px;">
+                <div style="font-size:13px;font-weight:600;color:#4a4844;margin-bottom:4px;">12</div>
+                <div style="width:44px;height:76px;background:#b9c4d6;"></div>
+              </div>
+              <div style="display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:190px;">
+                <div style="font-size:13px;font-weight:600;color:#22344d;margin-bottom:4px;">14</div>
+                <div style="width:44px;height:89px;background:#3b5b8c;"></div>
+              </div>
+            </div>
+            <div style="margin-top:8px;font-size:14px;color:#4a4844;">APAC</div>
+          </div>
+        </div>
+      <div style="display:flex;gap:16px;margin-top:12px;font-size:12px;color:#6b6863;">
+        <div style="display:flex;align-items:center;gap:5px;"><div style="width:11px;height:11px;background:#b9c4d6;"></div>Q1</div>
+        <div style="display:flex;align-items:center;gap:5px;"><div style="width:11px;height:11px;background:#3b5b8c;"></div>Q2</div>
+      </div>
+      <div class="info-hover" style="position:absolute;top:-10px; right:-10px;">
+      <div class="info-icon">i</div>
+      <div class="info-menu" style="right:0; top:12px;">
+        <div class="info-menu-inner">
+        <div style="display:flex;align-items:center;gap:10px;padding:9px 14px;cursor:pointer;" onmouseover="this.style.background='#f7f6f5'" onmouseout="this.style.background='transparent'"><span style="width:16px;text-align:center;color:#5b5955;">&#8693;</span><span style="font-size:13px;color:#22201e;">Rearrange order</span></div><div style="display:flex;align-items:center;gap:10px;padding:9px 14px;cursor:pointer;" onmouseover="this.style.background='#f7f6f5'" onmouseout="this.style.background='transparent'"><span style="width:16px;text-align:center;color:#5b5955;">&#65;</span><span style="font-size:13px;color:#22201e;">Font size &amp; typography</span></div><div style="display:flex;align-items:center;gap:10px;padding:9px 14px;cursor:pointer;" onmouseover="this.style.background='#f7f6f5'" onmouseout="this.style.background='transparent'"><span style="width:16px;text-align:center;color:#5b5955;">&#127912;</span><span style="font-size:13px;color:#22201e;">Change colour scheme</span></div><div style="display:flex;align-items:center;gap:10px;padding:9px 14px;cursor:pointer;" onmouseover="this.style.background='#f7f6f5'" onmouseout="this.style.background='transparent'"><span style="width:16px;text-align:center;color:#5b5955;">&#128200;</span><span style="font-size:13px;color:#22201e;">Change graph style</span></div>
+        <div style="height:1px;background:#efedeb;margin:4px 0;"></div>
+        <div style="display:flex;align-items:center;gap:10px;padding:9px 14px;cursor:pointer;background:#eef4ff;" onclick="goToStep(3)">
+          <span style="width:16px;text-align:center;">&#10024;</span>
+          <span style="font-size:13px;color:#2f6fed;font-weight:600;">Check information against linked data</span>
+        </div>
+        </div>
+      </div>
+    </div>
+      </div>
+    
+  
+  <div style="margin-top:22px;padding:14px 16px;background:#fbf7ec;border:1px solid #e8dcb8;border-radius:6px;font-size:13px;line-height:1.6;color:#3a3833;position:relative;">
+    <div style="font-size:10px;font-weight:700;letter-spacing:.05em;color:#9a7d2b;text-transform:uppercase;margin-bottom:6px;">Draft commentary &mdash; pasted from colleague, unapproved</div>
+    &ldquo;<span style="text-decoration:underline;text-decoration-style:wavy;text-decoration-color:#c0392b;text-underline-offset:3px;">Total revenue grew 12%</span>; <span style="text-decoration:underline;text-decoration-style:wavy;text-decoration-color:#c0392b;text-underline-offset:3px;">all regions contributed positively</span>. <span style="text-decoration:underline;text-decoration-style:wavy;text-decoration-color:#9a9793;text-underline-offset:3px;">Retention initiatives drove the growth</span>.&rdquo;
+    <div class="info-hover" style="position:absolute;top:-10px; right:-10px;">
+      <div class="info-icon">i</div>
+      <div class="info-menu" style="right:0; top:12px;">
+        <div class="info-menu-inner">
+        <div style="display:flex;align-items:center;gap:10px;padding:9px 14px;cursor:pointer;" onmouseover="this.style.background='#f7f6f5'" onmouseout="this.style.background='transparent'"><span style="width:16px;text-align:center;color:#5b5955;">&#9998;</span><span style="font-size:13px;color:#22201e;">Rewrite</span></div><div style="display:flex;align-items:center;gap:10px;padding:9px 14px;cursor:pointer;" onmouseover="this.style.background='#f7f6f5'" onmouseout="this.style.background='transparent'"><span style="width:16px;text-align:center;color:#5b5955;">&#8942;</span><span style="font-size:13px;color:#22201e;">Shorten</span></div><div style="display:flex;align-items:center;gap:10px;padding:9px 14px;cursor:pointer;" onmouseover="this.style.background='#f7f6f5'" onmouseout="this.style.background='transparent'"><span style="width:16px;text-align:center;color:#5b5955;">&#8226;</span><span style="font-size:13px;color:#22201e;">Make it bullet points</span></div><div style="display:flex;align-items:center;gap:10px;padding:9px 14px;cursor:pointer;" onmouseover="this.style.background='#f7f6f5'" onmouseout="this.style.background='transparent'"><span style="width:16px;text-align:center;color:#5b5955;">&#8801;</span><span style="font-size:13px;color:#22201e;">Apply parallel phrasing</span></div>
+        <div style="height:1px;background:#efedeb;margin:4px 0;"></div>
+        <div style="display:flex;align-items:center;gap:10px;padding:9px 14px;cursor:pointer;background:#eef4ff;" onclick="goToStep(3)">
+          <span style="width:16px;text-align:center;">&#10024;</span>
+          <span style="font-size:13px;color:#2f6fed;font-weight:600;">Check information against linked data</span>
+        </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div></div>
+<div style="width:320px;background:#fff;border-left:1px solid #e3e1df;display:flex;flex-direction:column;">
+  <div style="padding:16px 18px 12px;border-bottom:1px solid #efedeb;display:flex;align-items:center;justify-content:space-between;">
+      <div style="font-size:15px;font-weight:700;color:#22201e;">thinkcell Assist</div>
+      <div style="color:#8a8783;font-size:16px;">&times;</div>
+    </div>
+    <div style="display:flex;gap:20px;padding:12px 18px;border-bottom:1px solid #efedeb;">
+      <div style="color:#2f6fed;">&#128172;</div><div style="color:#5b5955;">&#10024;</div><div style="color:#5b5955;">&#128209;</div>
+      <div style="color:#5b5955;">&#128203;</div><div style="color:#5b5955;">&#128269;</div><div style="color:#5b5955;margin-left:auto;">&#9776;</div>
+    </div>
+  <div style="flex:1;overflow:auto;padding:16px 18px;">
+    <p style="font-size:12.5px;color:#8a8783;margin:0 0 14px;">Select a task or prompt idea.</p>
+    <div style="display:flex;align-items:center;gap:12px;background:#f7f9fc;border:1px solid #e3e9f2;border-radius:8px;padding:12px 14px;margin-bottom:10px;">
+      <span style="color:#2f6fed;font-size:15px;">&#10024;</span><span style="font-size:13px;color:#22201e;font-weight:500;">Edit and organize text</span>
+    </div>
+    <div style="display:flex;align-items:center;gap:12px;background:#f7f9fc;border:1px solid #e3e9f2;border-radius:8px;padding:12px 14px;margin-bottom:10px;">
+      <span style="color:#2f6fed;font-size:15px;">&#128441;</span><span style="font-size:13px;color:#22201e;font-weight:500;">Translate your slides</span>
+    </div>
+    <div style="display:flex;align-items:center;gap:12px;background:#f7f9fc;border:1px solid #e3e9f2;border-radius:8px;padding:12px 14px;margin-bottom:10px;">
+      <span style="color:#2f6fed;font-size:15px;">&#128221;</span><span style="font-size:13px;color:#22201e;font-weight:500;">Create titles and summaries</span>
+    </div>
+    <div style="display:flex;align-items:center;gap:12px;background:#f7f9fc;border:1px solid #e3e9f2;border-radius:8px;padding:12px 14px;margin-bottom:10px;">
+      <span style="color:#2f6fed;font-size:15px;">&#128269;</span><span style="font-size:13px;color:#22201e;font-weight:500;">Find stats and financial data</span>
+    </div>
+    <div onclick="goToStep(3)" style="display:flex;align-items:center;gap:12px;background:#fdeceb;border:1px solid #e8a8a2;border-radius:8px;padding:12px 14px;margin-bottom:10px;cursor:pointer;">
+      <span style="color:#c0392b;font-size:15px;">&#10024;</span><span style="font-size:13px;color:#c0392b;font-weight:700;">Check information against linked data</span>
+    </div>
+    <p style="font-size:11px;font-weight:700;color:#9a9793;text-transform:uppercase;letter-spacing:.04em;margin:20px 0 10px;">Prompt ideas</p>
+    <div style="background:#eef4ff;border:1px solid #cddcfb;border-radius:8px;padding:10px 12px;margin-bottom:8px;font-size:12.5px;color:#2f6fed;">Latest global M&amp;A activity this quarter</div>
+    <div style="background:#eef4ff;border:1px solid #cddcfb;border-radius:8px;padding:10px 12px;margin-bottom:8px;font-size:12.5px;color:#2f6fed;">What is the quarterly gross profit trend for Amazon.com?</div>
+    <div style="background:#eef4ff;border:1px solid #cddcfb;border-radius:8px;padding:10px 12px;margin-bottom:8px;font-size:12.5px;color:#2f6fed;">Suggest compelling action titles for my slide</div>
+  </div>
+  <div style="border-top:1px solid #efedeb;padding:12px 18px;">
+      <div style="display:flex;align-items:center;gap:8px;border:1px solid #e3e1df;border-radius:20px;padding:9px 14px;">
+        <span style="color:#8a8783;">&#128206;</span><span style="color:#a5a29d;font-size:12.5px;flex:1;">Ask thinkcell Assist&hellip;</span><span style="color:#c0392b;">&#10148;</span>
+      </div>
+      <div style="text-align:center;font-size:10px;color:#c3c0bc;margin-top:6px;">Powered by AI</div>
+    </div>
+</div>
+</div>
+</div>
+<p style="text-align:center;color:#6b6863;font-size:13px;margin-top:14px;">Try it: click the draft commentary or the chart to see the contextual actions, or use the button on the right.</p></div><div id="step3" class="steppanel" style="display:none;flex-direction:column;align-items:center;padding:32px;"><div style="width:1300px;box-sizing:border-box;display:flex;flex-direction:column;background:#faf9f8;border:1px solid #d6d3d1;border-radius:8px;overflow:hidden;">
+  
+<div style="height:32px;background:#2b2b2b;display:flex;align-items:center;padding:0 12px;color:#e5e5e5;font-size:12px;">
+  Regional_revenue_Q2_v3.pptx &mdash; PowerPoint
+</div>
+<div style="height:34px;background:#faf9f8;border-bottom:1px solid #e3e1df;display:flex;align-items:flex-end;gap:2px;padding:0 12px;font-size:13px;color:#5b5955;">
+  <div style="padding:8px 10px;">File</div><div style="padding:8px 10px;">Home</div><div style="padding:8px 10px;">Insert</div>
+  <div style="padding:8px 10px;">Design</div><div style="padding:8px 10px;">Transitions</div><div style="padding:8px 10px;">Review</div>
+  <div style="padding:8px 10px 6px;border-bottom:2px solid #c0392b;color:#c0392b;font-weight:600;">think-cell</div>
+</div>
+<div style="height:56px;background:#fff;border-bottom:1px solid #e3e1df;display:flex;align-items:center;gap:16px;padding:0 16px;overflow-x:auto;">
+      <div style="display:flex;flex-direction:column;align-items:center;gap:4px;"><div style="display:flex;gap:5px;"><div style="width:26px;height:26px;border-radius:6px;background:#f2f1ef;"></div></div><div style="font-size:9.5px;color:#8a8783;white-space:nowrap;">New Slide</div></div>
+      <div style="display:flex;flex-direction:column;align-items:center;gap:4px;"><div style="display:flex;gap:5px;"><div style="width:26px;height:26px;border-radius:6px;background:#f2f1ef;"></div></div><div style="font-size:9.5px;color:#8a8783;white-space:nowrap;">Paste</div></div>
+      <div style="width:1px;height:32px;background:#e3e1df;flex:0 0 auto;"></div>
+      <div style="display:flex;flex-direction:column;align-items:center;gap:4px;"><div style="display:flex;gap:5px;"><div style="width:26px;height:26px;border-radius:6px;background:#f2f1ef;"></div></div><div style="font-size:9.5px;color:#8a8783;white-space:nowrap;">Library</div></div>
+      <div style="display:flex;flex-direction:column;align-items:center;gap:4px;"><div style="display:flex;gap:5px;"><div style="width:26px;height:26px;border-radius:6px;background:#f2f1ef;"></div></div><div style="font-size:9.5px;color:#8a8783;white-space:nowrap;">Agenda</div></div>
+      <div style="width:1px;height:32px;background:#e3e1df;flex:0 0 auto;"></div>
+      <div style="display:flex;flex-direction:column;align-items:center;gap:4px;">
+        <div style="display:flex;align-items:center;gap:6px;background:#eef4ff;border:1px solid #bcd4fb;border-radius:6px;padding:4px 10px;"><span style="font-size:14px;">&#10024;</span><span style="font-size:11px;font-weight:600;color:#2f6fed;">Assist</span></div>
+      </div>
+      <div style="display:flex;flex-direction:column;align-items:center;gap:4px;"><div style="display:flex;gap:5px;"><div style="width:26px;height:26px;border-radius:6px;background:#f2f1ef;"></div></div><div style="font-size:9.5px;color:#8a8783;white-space:nowrap;">Charts</div></div>
+      <div style="display:flex;flex-direction:column;align-items:center;gap:4px;"><div style="display:flex;gap:5px;"><div style="width:26px;height:26px;border-radius:6px;background:#f2f1ef;"></div></div><div style="font-size:9.5px;color:#8a8783;white-space:nowrap;">Table</div></div>
+      <div style="width:1px;height:32px;background:#e3e1df;flex:0 0 auto;"></div>
+      <div style="display:flex;flex-direction:column;align-items:center;gap:4px;"><div style="display:flex;gap:5px;"><div style="width:26px;height:26px;border-radius:6px;background:#f2f1ef;"></div></div><div style="font-size:9.5px;color:#8a8783;white-space:nowrap;">Shapes</div></div>
+      <div style="display:flex;flex-direction:column;align-items:center;gap:4px;"><div style="display:flex;gap:5px;"><div style="width:26px;height:26px;border-radius:6px;background:#f2f1ef;"></div></div><div style="font-size:9.5px;color:#8a8783;white-space:nowrap;">Images</div></div>
+      <div style="width:1px;height:32px;background:#e3e1df;flex:0 0 auto;"></div>
+      <div style="display:flex;flex-direction:column;align-items:center;gap:4px;"><div style="display:flex;gap:5px;"><div style="width:26px;height:26px;border-radius:6px;background:#f2f1ef;"></div></div><div style="font-size:9.5px;color:#8a8783;white-space:nowrap;">Data Links</div></div>
+      <div style="display:flex;flex-direction:column;align-items:center;gap:4px;"><div style="display:flex;gap:5px;"><div style="width:26px;height:26px;border-radius:6px;background:#f2f1ef;"></div></div><div style="font-size:9.5px;color:#8a8783;white-space:nowrap;">Slide Workbook</div></div>
+      <div style="display:flex;flex-direction:column;align-items:center;gap:4px;"><div style="display:flex;gap:5px;"><div style="width:26px;height:26px;border-radius:6px;background:#f2f1ef;"></div></div><div style="font-size:9.5px;color:#8a8783;white-space:nowrap;">New Excel Link</div></div>
+      <div style="width:1px;height:32px;background:#e3e1df;flex:0 0 auto;"></div>
+      <div style="display:flex;flex-direction:column;align-items:center;gap:4px;"><div style="display:flex;gap:5px;"><div style="width:26px;height:26px;border-radius:6px;background:#f2f1ef;"></div></div><div style="font-size:9.5px;color:#8a8783;white-space:nowrap;">Comment</div></div>
+      <div style="display:flex;flex-direction:column;align-items:center;gap:4px;"><div style="display:flex;gap:5px;"><div style="width:26px;height:26px;border-radius:6px;background:#f2f1ef;"></div></div><div style="font-size:9.5px;color:#8a8783;white-space:nowrap;">Send Slides</div></div>
+      <div style="display:flex;flex-direction:column;align-items:center;gap:4px;"><div style="display:flex;gap:5px;"><div style="width:26px;height:26px;border-radius:6px;background:#f2f1ef;"></div></div><div style="font-size:9.5px;color:#8a8783;white-space:nowrap;">Save Slides</div></div>
+      <div style="width:1px;height:32px;background:#e3e1df;flex:0 0 auto;"></div>
+      <div style="display:flex;flex-direction:column;align-items:center;gap:4px;"><div style="display:flex;gap:5px;"><div style="width:26px;height:26px;border-radius:6px;background:#f2f1ef;"></div></div><div style="font-size:9.5px;color:#8a8783;white-space:nowrap;">Swap Objects</div></div>
+      <div style="display:flex;flex-direction:column;align-items:center;gap:4px;"><div style="display:flex;gap:5px;"><div style="width:26px;height:26px;border-radius:6px;background:#f2f1ef;"></div></div><div style="font-size:9.5px;color:#8a8783;white-space:nowrap;">Shape Outline</div></div>
+    </div>
+  <div style="display:flex;min-height:620px;"><div style="width:120px;background:#efedeb;border-right:1px solid #e3e1df;padding:10px 0;display:flex;flex-direction:column;align-items:center;gap:10px;">
+      <div style="width:96px;height:54px;background:#fff;border:1px solid #d6d3d1;border-radius:2px;"></div>
+      <div style="width:96px;height:54px;background:#fff;border:1px solid #d6d3d1;border-radius:2px;"></div>
+      <div style="width:96px;height:54px;background:#fff;border:2px solid #c0392b;border-radius:2px;"></div>
+      <div style="width:96px;height:54px;background:#fff;border:1px solid #d6d3d1;border-radius:2px;"></div>
+    </div><div style="flex:1;background:#dedcd9;display:flex;align-items:center;justify-content:center;padding:24px;min-width:0;"><div style="width:1060px;height:600px;background:#fff;box-shadow:0 1px 4px rgba(0,0,0,.15);position:relative;padding:40px 48px;box-sizing:border-box;">
+  <div style="font-size:11px;letter-spacing:.06em;color:#9a9793;text-transform:uppercase;margin-bottom:4px;">Northstar Services</div>
+  <div style="font-size:22px;font-weight:600;color:#22201e;margin-bottom:18px;">Revenue up &euro;3m to &euro;57m; only EMEA and APAC grew</div>
+  
+      <div style="position:relative;">
+      <div style="display:flex;gap:8px;align-items:flex-end;">
+          <div style="display:flex;flex-direction:column;align-items:center;width:150px;">
+            <div style="display:flex;align-items:flex-end;gap:8px;height:190px;">
+              <div style="display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:190px;">
+                <div style="font-size:13px;font-weight:600;color:#4a4844;margin-bottom:4px;">24</div>
+                <div style="width:44px;height:152px;background:#b9c4d6;"></div>
+              </div>
+              <div style="display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:190px;">
+                <div style="font-size:13px;font-weight:600;color:#22344d;margin-bottom:4px;">27</div>
+                <div style="width:44px;height:171px;background:#3b5b8c;"></div>
+              </div>
+            </div>
+            <div style="margin-top:8px;font-size:14px;color:#4a4844;">EMEA</div>
+          </div>
+        
+          <div style="display:flex;flex-direction:column;align-items:center;width:150px;">
+            <div style="display:flex;align-items:flex-end;gap:8px;height:190px;">
+              <div style="display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:190px;">
+                <div style="font-size:13px;font-weight:600;color:#4a4844;margin-bottom:4px;">18</div>
+                <div style="width:44px;height:114px;background:#b9c4d6;"></div>
+              </div>
+              <div style="display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:190px;">
+                <div style="font-size:13px;font-weight:600;color:#22344d;margin-bottom:4px;">16</div>
+                <div style="width:44px;height:101px;background:#3b5b8c;"></div>
+              </div>
+            </div>
+            <div style="margin-top:8px;font-size:14px;color:#4a4844;">Americas</div>
+          </div>
+        
+          <div style="display:flex;flex-direction:column;align-items:center;width:150px;">
+            <div style="display:flex;align-items:flex-end;gap:8px;height:190px;">
+              <div style="display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:190px;">
+                <div style="font-size:13px;font-weight:600;color:#4a4844;margin-bottom:4px;">12</div>
+                <div style="width:44px;height:76px;background:#b9c4d6;"></div>
+              </div>
+              <div style="display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:190px;">
+                <div style="font-size:13px;font-weight:600;color:#22344d;margin-bottom:4px;">14</div>
+                <div style="width:44px;height:89px;background:#3b5b8c;"></div>
+              </div>
+            </div>
+            <div style="margin-top:8px;font-size:14px;color:#4a4844;">APAC</div>
+          </div>
+        </div>
+      <div style="display:flex;gap:16px;margin-top:12px;font-size:12px;color:#6b6863;">
+        <div style="display:flex;align-items:center;gap:5px;"><div style="width:11px;height:11px;background:#b9c4d6;"></div>Q1</div>
+        <div style="display:flex;align-items:center;gap:5px;"><div style="width:11px;height:11px;background:#3b5b8c;"></div>Q2</div>
+      </div>
+      
+      </div>
+    
+  
+  <div id="commentaryBox3" style="margin-top:22px;padding:14px 16px;background:#fbf7ec;border:2px solid #c0392b;border-radius:6px;font-size:13px;line-height:1.6;color:#3a3833;transition:background .3s,border-color .3s;">
+    <div id="commentaryLabel3" style="font-size:10px;font-weight:700;letter-spacing:.05em;color:#9a7d2b;text-transform:uppercase;margin-bottom:6px;">Draft commentary &mdash; pasted from colleague, unapproved</div>
+    &ldquo;<span id="ct1" style="text-decoration:underline;text-decoration-style:wavy;text-decoration-color:#c0392b;text-underline-offset:3px;">Total revenue grew 12%</span>; <span id="ct2" style="text-decoration:underline;text-decoration-style:wavy;text-decoration-color:#c0392b;text-underline-offset:3px;">all regions contributed positively</span>.<span id="ct3wrap"> <span id="ct3" style="text-decoration:underline;text-decoration-style:wavy;text-decoration-color:#9a9793;text-underline-offset:3px;">Retention initiatives drove the growth</span>.</span>&rdquo;
+  </div>
+
+</div></div>
+<div style="width:320px;background:#fff;border-left:1px solid #e3e1df;display:flex;flex-direction:column;">
+  <div style="padding:16px 18px 12px;border-bottom:1px solid #efedeb;">
+    <div style="font-size:13px;font-weight:700;color:#22201e;">Claim Check</div>
+    <div id="claimSummary" style="font-size:12px;color:#6b6863;margin-top:2px;">3 items to review before sending to Finance</div>
+  </div>
+  <div style="flex:1;overflow:auto;">
+    <div style="border-bottom:1px solid #f3f2f1;">
+      <div onclick="toggleClaim(1)" style="padding:14px 18px;cursor:pointer;display:flex;justify-content:space-between;align-items:flex-start;gap:8px;">
+        <div style="font-size:12.5px;color:#22201e;">&ldquo;Total revenue grew 12%&rdquo;</div>
+        <div id="badge1" style="flex:0 0 auto;font-size:9px;font-weight:700;color:#c0392b;background:#c0392b18;border:1px solid #c0392b55;border-radius:8px;padding:2px 7px;white-space:nowrap;">CONTRADICTED</div>
+      </div>
+      <div id="detail1" style="display:none;padding:0 18px 18px;">
+        <div style="font-size:11px;font-weight:700;color:#9a9793;text-transform:uppercase;letter-spacing:.04em;margin-bottom:4px;">Approved figures show</div>
+        <div style="font-size:13px;color:#22201e;margin-bottom:12px;">&euro;54m &rarr; &euro;57m = <b>+5.6%</b> (+9.6% like-for-like)</div>
+        <div style="font-size:11px;font-weight:700;color:#9a9793;text-transform:uppercase;letter-spacing:.04em;margin-bottom:6px;">Suggested replacement</div>
+        <div style="font-size:12.5px;color:#22201e;background:#f3f7f0;border:1px solid #cfe3c4;border-radius:6px;padding:9px 10px;margin-bottom:12px;">&ldquo;Total revenue grew 5.6% (9.6% like-for-like)&rdquo;</div>
+        <button onclick="resolveClaim(1, event)" style="width:100%;background:#2f5b3f;color:#fff;border:none;border-radius:6px;padding:9px 0;font-size:12.5px;font-weight:600;margin-bottom:8px;cursor:pointer;">Fix as suggested</button>
+        <button onclick="keepClaim(1, event)" style="width:100%;background:#fff;color:#3a3833;border:1px solid #d6d3d1;border-radius:6px;padding:9px 0;font-size:12.5px;font-weight:600;cursor:pointer;">Keep as it is</button>
+      </div>
+    </div>
+    <div style="border-bottom:1px solid #f3f2f1;">
+      <div onclick="toggleClaim(2)" style="padding:14px 18px;cursor:pointer;display:flex;justify-content:space-between;align-items:flex-start;gap:8px;">
+        <div style="font-size:12.5px;color:#22201e;">&ldquo;All regions contributed positively&rdquo;</div>
+        <div id="badge2" style="flex:0 0 auto;font-size:9px;font-weight:700;color:#c0392b;background:#c0392b18;border:1px solid #c0392b55;border-radius:8px;padding:2px 7px;white-space:nowrap;">CONTRADICTED</div>
+      </div>
+      <div id="detail2" style="display:none;padding:0 18px 18px;">
+        <div style="font-size:11px;font-weight:700;color:#9a9793;text-transform:uppercase;letter-spacing:.04em;margin-bottom:4px;">Approved figures show</div>
+        <div style="font-size:13px;color:#22201e;margin-bottom:12px;">Americas: &euro;18m &rarr; &euro;16m (&minus;11.1%)</div>
+        <div style="font-size:11px;font-weight:700;color:#9a9793;text-transform:uppercase;letter-spacing:.04em;margin-bottom:6px;">Suggested replacement</div>
+        <div style="font-size:12.5px;color:#22201e;background:#f3f7f0;border:1px solid #cfe3c4;border-radius:6px;padding:9px 10px;margin-bottom:12px;">&ldquo;EMEA and APAC grew; Americas declined 11.1%&rdquo;</div>
+        <button onclick="resolveClaim(2, event)" style="width:100%;background:#2f5b3f;color:#fff;border:none;border-radius:6px;padding:9px 0;font-size:12.5px;font-weight:600;margin-bottom:8px;cursor:pointer;">Fix as suggested</button>
+        <button onclick="keepClaim(2, event)" style="width:100%;background:#fff;color:#3a3833;border:1px solid #d6d3d1;border-radius:6px;padding:9px 0;font-size:12.5px;font-weight:600;cursor:pointer;">Keep as it is</button>
+      </div>
+    </div>
+    <div style="border-bottom:1px solid #f3f2f1;">
+      <div onclick="toggleClaim(3)" style="padding:14px 18px;cursor:pointer;display:flex;justify-content:space-between;align-items:flex-start;gap:8px;">
+        <div style="font-size:12.5px;color:#22201e;">&ldquo;Retention initiatives drove the growth&rdquo;</div>
+        <div id="badge3" style="flex:0 0 auto;font-size:9px;font-weight:700;color:#c0392b;background:#c0392b18;border:1px solid #c0392b55;border-radius:8px;padding:2px 7px;white-space:nowrap;">NO DATA LINKED</div>
+      </div>
+      <div id="detail3" style="display:none;padding:0 18px 18px;">
+        <div style="font-size:11px;font-weight:700;color:#9a9793;text-transform:uppercase;letter-spacing:.04em;margin-bottom:4px;">Approved figures show</div>
+        <div style="font-size:13px;color:#22201e;margin-bottom:12px;">No driver data in this extract</div>
+        <div style="font-size:11px;font-weight:700;color:#9a9793;text-transform:uppercase;letter-spacing:.04em;margin-bottom:6px;">Suggested replacement</div>
+        <div style="font-size:12.5px;color:#22201e;background:#f3f7f0;border:1px solid #cfe3c4;border-radius:6px;padding:9px 10px;margin-bottom:12px;">&ldquo;Remove or mark as unverified&rdquo;</div>
+        <button onclick="resolveClaim(3, event)" style="width:100%;background:#2f5b3f;color:#fff;border:none;border-radius:6px;padding:9px 0;font-size:12.5px;font-weight:600;margin-bottom:8px;cursor:pointer;">Fix as suggested</button>
+        <button onclick="keepClaim(3, event)" style="width:100%;background:#fff;color:#3a3833;border:1px solid #d6d3d1;border-radius:6px;padding:9px 0;font-size:12.5px;font-weight:600;cursor:pointer;">Keep as it is</button>
+      </div>
+    </div>
+  </div>
+  <div style="padding:12px 18px;border-top:1px solid #efedeb;font-size:11px;color:#8a8783;">Checked against Regional_revenue_Q2_v3.xlsx (Finance-approved)</div>
+</div>
+</div>
+</div>
+<p style="text-align:center;color:#6b6863;font-size:13px;margin-top:14px;">Try it: click a flagged claim to expand it, then choose &ldquo;Fix as suggested&rdquo; or &ldquo;Keep as it is&rdquo;.</p></div><div id="step4" class="steppanel" style="display:none;flex-direction:column;align-items:center;padding:32px;"><div style="width:1300px;box-sizing:border-box;display:flex;flex-direction:column;background:#faf9f8;border:1px solid #d6d3d1;border-radius:8px;overflow:hidden;">
+  
+<div style="height:32px;background:#2b2b2b;display:flex;align-items:center;padding:0 12px;color:#e5e5e5;font-size:12px;">
+  Regional_revenue_Q2_v3.pptx &mdash; PowerPoint
+</div>
+<div style="height:34px;background:#faf9f8;border-bottom:1px solid #e3e1df;display:flex;align-items:flex-end;gap:2px;padding:0 12px;font-size:13px;color:#5b5955;">
+  <div style="padding:8px 10px;">File</div><div style="padding:8px 10px;">Home</div><div style="padding:8px 10px;">Insert</div>
+  <div style="padding:8px 10px;">Design</div><div style="padding:8px 10px;">Transitions</div><div style="padding:8px 10px;">Review</div>
+  <div style="padding:8px 10px 6px;border-bottom:2px solid #c0392b;color:#c0392b;font-weight:600;">think-cell</div>
+</div>
+<div style="height:56px;background:#fff;border-bottom:1px solid #e3e1df;display:flex;align-items:center;gap:16px;padding:0 16px;overflow-x:auto;">
+      <div style="display:flex;flex-direction:column;align-items:center;gap:4px;"><div style="display:flex;gap:5px;"><div style="width:26px;height:26px;border-radius:6px;background:#f2f1ef;"></div></div><div style="font-size:9.5px;color:#8a8783;white-space:nowrap;">New Slide</div></div>
+      <div style="display:flex;flex-direction:column;align-items:center;gap:4px;"><div style="display:flex;gap:5px;"><div style="width:26px;height:26px;border-radius:6px;background:#f2f1ef;"></div></div><div style="font-size:9.5px;color:#8a8783;white-space:nowrap;">Paste</div></div>
+      <div style="width:1px;height:32px;background:#e3e1df;flex:0 0 auto;"></div>
+      <div style="display:flex;flex-direction:column;align-items:center;gap:4px;"><div style="display:flex;gap:5px;"><div style="width:26px;height:26px;border-radius:6px;background:#f2f1ef;"></div></div><div style="font-size:9.5px;color:#8a8783;white-space:nowrap;">Library</div></div>
+      <div style="display:flex;flex-direction:column;align-items:center;gap:4px;"><div style="display:flex;gap:5px;"><div style="width:26px;height:26px;border-radius:6px;background:#f2f1ef;"></div></div><div style="font-size:9.5px;color:#8a8783;white-space:nowrap;">Agenda</div></div>
+      <div style="width:1px;height:32px;background:#e3e1df;flex:0 0 auto;"></div>
+      <div style="display:flex;flex-direction:column;align-items:center;gap:4px;">
+        <div style="display:flex;align-items:center;gap:6px;background:#eef4ff;border:1px solid #bcd4fb;border-radius:6px;padding:4px 10px;"><span style="font-size:14px;">&#10024;</span><span style="font-size:11px;font-weight:600;color:#2f6fed;">Assist</span></div>
+      </div>
+      <div style="display:flex;flex-direction:column;align-items:center;gap:4px;"><div style="display:flex;gap:5px;"><div style="width:26px;height:26px;border-radius:6px;background:#f2f1ef;"></div></div><div style="font-size:9.5px;color:#8a8783;white-space:nowrap;">Charts</div></div>
+      <div style="display:flex;flex-direction:column;align-items:center;gap:4px;"><div style="display:flex;gap:5px;"><div style="width:26px;height:26px;border-radius:6px;background:#f2f1ef;"></div></div><div style="font-size:9.5px;color:#8a8783;white-space:nowrap;">Table</div></div>
+      <div style="width:1px;height:32px;background:#e3e1df;flex:0 0 auto;"></div>
+      <div style="display:flex;flex-direction:column;align-items:center;gap:4px;"><div style="display:flex;gap:5px;"><div style="width:26px;height:26px;border-radius:6px;background:#f2f1ef;"></div></div><div style="font-size:9.5px;color:#8a8783;white-space:nowrap;">Shapes</div></div>
+      <div style="display:flex;flex-direction:column;align-items:center;gap:4px;"><div style="display:flex;gap:5px;"><div style="width:26px;height:26px;border-radius:6px;background:#f2f1ef;"></div></div><div style="font-size:9.5px;color:#8a8783;white-space:nowrap;">Images</div></div>
+      <div style="width:1px;height:32px;background:#e3e1df;flex:0 0 auto;"></div>
+      <div style="display:flex;flex-direction:column;align-items:center;gap:4px;"><div style="display:flex;gap:5px;"><div style="width:26px;height:26px;border-radius:6px;background:#f2f1ef;"></div></div><div style="font-size:9.5px;color:#8a8783;white-space:nowrap;">Data Links</div></div>
+      <div style="display:flex;flex-direction:column;align-items:center;gap:4px;"><div style="display:flex;gap:5px;"><div style="width:26px;height:26px;border-radius:6px;background:#f2f1ef;"></div></div><div style="font-size:9.5px;color:#8a8783;white-space:nowrap;">Slide Workbook</div></div>
+      <div style="display:flex;flex-direction:column;align-items:center;gap:4px;"><div style="display:flex;gap:5px;"><div style="width:26px;height:26px;border-radius:6px;background:#f2f1ef;"></div></div><div style="font-size:9.5px;color:#8a8783;white-space:nowrap;">New Excel Link</div></div>
+      <div style="width:1px;height:32px;background:#e3e1df;flex:0 0 auto;"></div>
+      <div style="display:flex;flex-direction:column;align-items:center;gap:4px;"><div style="display:flex;gap:5px;"><div style="width:26px;height:26px;border-radius:6px;background:#f2f1ef;"></div></div><div style="font-size:9.5px;color:#8a8783;white-space:nowrap;">Comment</div></div>
+      <div style="display:flex;flex-direction:column;align-items:center;gap:4px;"><div style="display:flex;gap:5px;"><div style="width:26px;height:26px;border-radius:6px;background:#f2f1ef;"></div></div><div style="font-size:9.5px;color:#8a8783;white-space:nowrap;">Send Slides</div></div>
+      <div style="display:flex;flex-direction:column;align-items:center;gap:4px;"><div style="display:flex;gap:5px;"><div style="width:26px;height:26px;border-radius:6px;background:#f2f1ef;"></div></div><div style="font-size:9.5px;color:#8a8783;white-space:nowrap;">Save Slides</div></div>
+      <div style="width:1px;height:32px;background:#e3e1df;flex:0 0 auto;"></div>
+      <div style="display:flex;flex-direction:column;align-items:center;gap:4px;"><div style="display:flex;gap:5px;"><div style="width:26px;height:26px;border-radius:6px;background:#f2f1ef;"></div></div><div style="font-size:9.5px;color:#8a8783;white-space:nowrap;">Swap Objects</div></div>
+      <div style="display:flex;flex-direction:column;align-items:center;gap:4px;"><div style="display:flex;gap:5px;"><div style="width:26px;height:26px;border-radius:6px;background:#f2f1ef;"></div></div><div style="font-size:9.5px;color:#8a8783;white-space:nowrap;">Shape Outline</div></div>
+    </div>
+  <div style="display:flex;min-height:620px;"><div style="width:120px;background:#efedeb;border-right:1px solid #e3e1df;padding:10px 0;display:flex;flex-direction:column;align-items:center;gap:10px;">
+      <div style="width:96px;height:54px;background:#fff;border:1px solid #d6d3d1;border-radius:2px;"></div>
+      <div style="width:96px;height:54px;background:#fff;border:1px solid #d6d3d1;border-radius:2px;"></div>
+      <div style="width:96px;height:54px;background:#fff;border:2px solid #c0392b;border-radius:2px;"></div>
+      <div style="width:96px;height:54px;background:#fff;border:1px solid #d6d3d1;border-radius:2px;"></div>
+    </div><div style="flex:1;background:#dedcd9;display:flex;align-items:center;justify-content:center;padding:24px;min-width:0;"><div style="width:1060px;height:600px;background:#fff;box-shadow:0 1px 4px rgba(0,0,0,.15);position:relative;padding:40px 48px;box-sizing:border-box;">
+  <div style="font-size:11px;letter-spacing:.06em;color:#9a9793;text-transform:uppercase;margin-bottom:4px;">Northstar Services</div>
+  <div style="font-size:22px;font-weight:600;color:#22201e;margin-bottom:18px;">Revenue up &euro;3m to &euro;57m; only EMEA and APAC grew</div>
+  
+      <div style="position:relative;">
+      <div style="display:flex;gap:8px;align-items:flex-end;">
+          <div style="display:flex;flex-direction:column;align-items:center;width:150px;">
+            <div style="display:flex;align-items:flex-end;gap:8px;height:190px;">
+              <div style="display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:190px;">
+                <div style="font-size:13px;font-weight:600;color:#4a4844;margin-bottom:4px;">24</div>
+                <div style="width:44px;height:152px;background:#b9c4d6;"></div>
+              </div>
+              <div style="display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:190px;">
+                <div style="font-size:13px;font-weight:600;color:#22344d;margin-bottom:4px;">27</div>
+                <div style="width:44px;height:171px;background:#3b5b8c;"></div>
+              </div>
+            </div>
+            <div style="margin-top:8px;font-size:14px;color:#4a4844;">EMEA</div>
+          </div>
+        
+          <div style="display:flex;flex-direction:column;align-items:center;width:150px;">
+            <div style="display:flex;align-items:flex-end;gap:8px;height:190px;">
+              <div style="display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:190px;">
+                <div style="font-size:13px;font-weight:600;color:#4a4844;margin-bottom:4px;">18</div>
+                <div style="width:44px;height:114px;background:#b9c4d6;"></div>
+              </div>
+              <div style="display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:190px;">
+                <div style="font-size:13px;font-weight:600;color:#22344d;margin-bottom:4px;">16</div>
+                <div style="width:44px;height:101px;background:#3b5b8c;"></div>
+              </div>
+            </div>
+            <div style="margin-top:8px;font-size:14px;color:#4a4844;">Americas</div>
+          </div>
+        
+          <div style="display:flex;flex-direction:column;align-items:center;width:150px;">
+            <div style="display:flex;align-items:flex-end;gap:8px;height:190px;">
+              <div style="display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:190px;">
+                <div style="font-size:13px;font-weight:600;color:#4a4844;margin-bottom:4px;">12</div>
+                <div style="width:44px;height:76px;background:#b9c4d6;"></div>
+              </div>
+              <div style="display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:190px;">
+                <div style="font-size:13px;font-weight:600;color:#22344d;margin-bottom:4px;">14</div>
+                <div style="width:44px;height:89px;background:#3b5b8c;"></div>
+              </div>
+            </div>
+            <div style="margin-top:8px;font-size:14px;color:#4a4844;">APAC</div>
+          </div>
+        </div>
+      <div style="display:flex;gap:16px;margin-top:12px;font-size:12px;color:#6b6863;">
+        <div style="display:flex;align-items:center;gap:5px;"><div style="width:11px;height:11px;background:#b9c4d6;"></div>Q1</div>
+        <div style="display:flex;align-items:center;gap:5px;"><div style="width:11px;height:11px;background:#3b5b8c;"></div>Q2</div>
+      </div>
+      
+      </div>
+    
+  
+  <div id="commentary4Box" style="margin-top:22px;padding:14px 16px;background:#f3f7f0;border:1px solid #cfe3c4;border-radius:6px;font-size:13px;line-height:1.6;color:#3a3833;">
+    <div style="font-size:10px;font-weight:700;letter-spacing:.05em;color:#3f7a4f;text-transform:uppercase;margin-bottom:6px;">Approved commentary &mdash; checked against linked data</div>
+    <div class="c4text">&ldquo;Total revenue grew 5.6% (9.6% like-for-like). EMEA and APAC grew; Americas declined 11.1%.&rdquo;</div>
+  </div>
+
+</div></div>
+<div style="width:320px;background:#fff;border-left:1px solid #e3e1df;display:flex;flex-direction:column;">
+  <div style="padding:16px 18px 12px;border-bottom:1px solid #efedeb;">
+    <div style="font-size:13px;font-weight:700;color:#22201e;">Claim Check</div>
+    <div style="font-size:12px;color:#2f5b3f;margin-top:2px;font-weight:600;">All checks solved &mdash; ready for Finance</div>
+  </div>
+  <div id="resolvedList4" style="flex:1;overflow:auto;">
+    <div style="padding:14px 18px;border-bottom:1px solid #f3f2f1;display:flex;justify-content:space-between;align-items:center;gap:8px;">
+      <div style="font-size:12.5px;color:#22201e;">&ldquo;Total revenue grew 5.6% (9.6% like-for-like)&rdquo;</div>
+      <div style="flex:0 0 auto;font-size:9px;font-weight:700;color:#2f5b3f;background:#2f5b3f18;border:1px solid #2f5b3f55;border-radius:8px;padding:2px 7px;white-space:nowrap;">&#10003; RESOLVED</div>
+    </div>
+    <div style="padding:14px 18px;border-bottom:1px solid #f3f2f1;display:flex;justify-content:space-between;align-items:center;gap:8px;">
+      <div style="font-size:12.5px;color:#22201e;">&ldquo;EMEA and APAC grew; Americas declined 11.1%&rdquo;</div>
+      <div style="flex:0 0 auto;font-size:9px;font-weight:700;color:#2f5b3f;background:#2f5b3f18;border:1px solid #2f5b3f55;border-radius:8px;padding:2px 7px;white-space:nowrap;">&#10003; RESOLVED</div>
+    </div>
+    <div style="padding:14px 18px;border-bottom:1px solid #f3f2f1;display:flex;justify-content:space-between;align-items:center;gap:8px;">
+      <div style="font-size:12.5px;color:#22201e;">&ldquo;Retention claim removed &mdash; no linked data&rdquo;</div>
+      <div style="flex:0 0 auto;font-size:9px;font-weight:700;color:#2f5b3f;background:#2f5b3f18;border:1px solid #2f5b3f55;border-radius:8px;padding:2px 7px;white-space:nowrap;">&#10003; RESOLVED</div>
+    </div>
+  </div>
+  <div style="padding:14px 18px;border-top:1px solid #efedeb;background:#f7faf6;font-size:12px;color:#3f7a4f;line-height:1.5;">Nice work &mdash; this slide is checked against Regional_revenue_Q2_v3.xlsx and ready to send.</div>
+</div>
+</div>
+</div></div>
+<script>
+var current = 1;
+var claimStatus = {1:'open', 2:'open', 3:'open'};
+var claimAction = {1:null, 2:null, 3:null};
+
+function goToStep(n) {
+  document.querySelectorAll('.steppanel').forEach(function(el) { el.style.display = 'none'; });
+  document.getElementById('step' + n).style.display = 'flex';
+  for (var i = 1; i <= 4; i++) {
+    var dot = document.getElementById('stepdot' + i);
+    var label = document.getElementById('steplabel' + i);
+    if (i <= n) { dot.style.background = '#c0392b'; label.style.color = '#22201e'; }
+    else { dot.style.background = '#c7c4c0'; label.style.color = '#8a8783'; }
+  }
+  current = n;
+}
+
+function toggleClaim(id) {
+  var detail = document.getElementById('detail' + id);
+  var isOpen = detail.style.display === 'block';
+  [1,2,3].forEach(function(i) { document.getElementById('detail' + i).style.display = 'none'; });
+  detail.style.display = isOpen ? 'none' : 'block';
+}
+
+var CLAIM_FIX_TEXT = {
+  1: 'Total revenue grew 5.6% (9.6% like-for-like)',
+  2: 'EMEA and APAC grew; Americas declined 11.1%'
+};
+
+function applySlideUpdate(id, action) {
+  if (id === 3) {
+    if (action === 'fix') {
+      var wrap = document.getElementById('ct3wrap');
+      if (wrap) wrap.style.display = 'none';
+    } else {
+      var span3 = document.getElementById('ct3');
+      span3.style.textDecoration = 'none';
+      span3.style.color = '#6b6863';
+      span3.style.fontStyle = 'italic';
+      if (span3.textContent.indexOf('unverified') === -1) {
+        span3.textContent = span3.textContent + ' (unverified)';
+      }
+    }
+    return;
+  }
+  var span = document.getElementById('ct' + id);
+  if (!span) return;
+  span.style.textDecoration = 'none';
+  if (action === 'fix') {
+    span.textContent = CLAIM_FIX_TEXT[id];
+    span.style.color = '#2f5b3f';
+    span.style.fontWeight = '600';
+  } else {
+    span.style.color = '#3a3833';
+  }
+}
+
+function markResolved(id, verdictText, action) {
+  claimStatus[id] = 'resolved';
+  claimAction[id] = action;
+  var badge = document.getElementById('badge' + id);
+  badge.textContent = verdictText;
+  badge.style.color = '#2f5b3f';
+  badge.style.background = '#2f5b3f18';
+  badge.style.borderColor = '#2f5b3f55';
+  document.getElementById('detail' + id).style.display = 'none';
+  applySlideUpdate(id, action);
+  var remaining = Object.values(claimStatus).filter(function(s) { return s === 'open'; }).length;
+  var summary = document.getElementById('claimSummary');
+  if (remaining === 0) {
+    summary.textContent = 'All checks solved — ready for Finance';
+    summary.style.color = '#2f5b3f';
+    summary.style.fontWeight = '600';
+    var box = document.getElementById('commentaryBox3');
+    var label = document.getElementById('commentaryLabel3');
+    if (box) { box.style.background = '#f3f7f0'; box.style.borderColor = '#cfe3c4'; box.style.borderWidth = '1px'; }
+    if (label) { label.textContent = 'Approved commentary — checked against linked data'; label.style.color = '#3f7a4f'; }
+    setTimeout(function() { finalizeStep4(); goToStep(4); }, 900);
+  } else {
+    summary.textContent = remaining + ' item' + (remaining === 1 ? '' : 's') + ' left to review';
+  }
+}
+
+function finalizeStep4() {
+  var t1 = document.getElementById('ct1').textContent;
+  var t2 = document.getElementById('ct2').textContent;
+  var wrap3 = document.getElementById('ct3wrap');
+  var t3visible = wrap3 && wrap3.style.display !== 'none';
+  var t3 = t3visible ? document.getElementById('ct3').textContent : null;
+  var sentence = t1 + '; ' + t2 + '.' + (t3 ? ' ' + t3 + '.' : '');
+  var box = document.getElementById('commentary4Box');
+  if (box) {
+    var textEl = box.querySelector('.c4text');
+    if (textEl) textEl.innerHTML = '\u201c' + sentence + '\u201d';
+  }
+
+  var rows = '';
+  [1,2,3].forEach(function(id) {
+    var action = claimAction[id];
+    var badgeText = action === 'fix' ? '\u2713 FIXED' : '\u2713 REVIEWED';
+    var text;
+    if (id === 3 && action === 'fix') {
+      text = 'Retention claim removed \u2014 no linked data';
+    } else {
+      text = document.getElementById('ct' + id).textContent;
+    }
+    rows += '<div style="padding:14px 18px;border-bottom:1px solid #f3f2f1;display:flex;justify-content:space-between;align-items:center;gap:8px;">' +
+      '<div style="font-size:12.5px;color:#22201e;">\u201c' + text + '\u201d</div>' +
+      '<div style="flex:0 0 auto;font-size:9px;font-weight:700;color:#2f5b3f;background:#2f5b3f18;border:1px solid #2f5b3f55;border-radius:8px;padding:2px 7px;white-space:nowrap;">' + badgeText + '</div>' +
+    '</div>';
+  });
+  var list = document.getElementById('resolvedList4');
+  if (list) list.innerHTML = rows;
+}
+
+function resolveClaim(id, ev) { ev.stopPropagation(); markResolved(id, '✓ FIXED', 'fix'); }
+function keepClaim(id, ev) { ev.stopPropagation(); markResolved(id, '✓ REVIEWED', 'keep'); }
+
+var CLAIM_ORIGINAL = {
+  1: { verdict: 'CONTRADICTED', text: 'Total revenue grew 12%', color: '#c0392b' },
+  2: { verdict: 'CONTRADICTED', text: 'all regions contributed positively', color: '#c0392b' },
+  3: { verdict: 'NO DATA LINKED', text: 'Retention initiatives drove the growth', color: '#9a9793' }
+};
+
+function resetPrototype() {
+  claimStatus = {1:'open', 2:'open', 3:'open'};
+  claimAction = {1:null, 2:null, 3:null};
+  [1,2,3].forEach(function(id) {
+    var orig = CLAIM_ORIGINAL[id];
+    var badge = document.getElementById('badge' + id);
+    if (badge) {
+      badge.textContent = orig.verdict;
+      badge.style.color = '#c0392b';
+      badge.style.background = '#c0392b18';
+      badge.style.borderColor = '#c0392b55';
+    }
+    var detail = document.getElementById('detail' + id);
+    if (detail) detail.style.display = 'none';
+    var span = document.getElementById('ct' + id);
+    if (span) {
+      span.textContent = orig.text;
+      span.style.textDecoration = 'underline';
+      span.style.textDecorationStyle = 'wavy';
+      span.style.textDecorationColor = orig.color;
+      span.style.textUnderlineOffset = '3px';
+      span.style.color = '';
+      span.style.fontWeight = '';
+      span.style.fontStyle = '';
+    }
+  });
+  var wrap = document.getElementById('ct3wrap');
+  if (wrap) wrap.style.display = '';
+  var summary = document.getElementById('claimSummary');
+  if (summary) {
+    summary.textContent = '3 items to review before sending to Finance';
+    summary.style.color = '#6b6863';
+    summary.style.fontWeight = 'normal';
+  }
+  var box = document.getElementById('commentaryBox3');
+  if (box) { box.style.background = '#fbf7ec'; box.style.borderColor = '#c0392b'; box.style.borderWidth = '2px'; }
+  var label = document.getElementById('commentaryLabel3');
+  if (label) { label.textContent = 'Draft commentary — pasted from colleague, unapproved'; label.style.color = '#9a7d2b'; }
+  var box4 = document.getElementById('commentary4Box');
+  if (box4) {
+    var textEl = box4.querySelector('.c4text');
+    if (textEl) textEl.innerHTML = '\u201cTotal revenue grew 5.6% (9.6% like-for-like). EMEA and APAC grew; Americas declined 11.1%.\u201d';
+  }
+  var list4 = document.getElementById('resolvedList4');
+  if (list4) {
+    list4.innerHTML = ''
+      + '<div style="padding:14px 18px;border-bottom:1px solid #f3f2f1;display:flex;justify-content:space-between;align-items:center;gap:8px;"><div style="font-size:12.5px;color:#22201e;">\u201cTotal revenue grew 5.6% (9.6% like-for-like)\u201d</div><div style="flex:0 0 auto;font-size:9px;font-weight:700;color:#2f5b3f;background:#2f5b3f18;border:1px solid #2f5b3f55;border-radius:8px;padding:2px 7px;white-space:nowrap;">\u2713 RESOLVED</div></div>'
+      + '<div style="padding:14px 18px;border-bottom:1px solid #f3f2f1;display:flex;justify-content:space-between;align-items:center;gap:8px;"><div style="font-size:12.5px;color:#22201e;">\u201cEMEA and APAC grew; Americas declined 11.1%\u201d</div><div style="flex:0 0 auto;font-size:9px;font-weight:700;color:#2f5b3f;background:#2f5b3f18;border:1px solid #2f5b3f55;border-radius:8px;padding:2px 7px;white-space:nowrap;">\u2713 RESOLVED</div></div>'
+      + '<div style="padding:14px 18px;border-bottom:1px solid #f3f2f1;display:flex;justify-content:space-between;align-items:center;gap:8px;"><div style="font-size:12.5px;color:#22201e;">\u201cRetention claim removed \u2014 no linked data\u201d</div><div style="flex:0 0 auto;font-size:9px;font-weight:700;color:#2f5b3f;background:#2f5b3f18;border:1px solid #2f5b3f55;border-radius:8px;padding:2px 7px;white-space:nowrap;">\u2713 RESOLVED</div></div>';
+  }
+  goToStep(1);
+}
+</script>
+</body>
+</html>
