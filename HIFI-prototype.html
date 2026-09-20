@@ -675,8 +675,8 @@ class Component extends DCLogic {
       })(),
       claimSummary: (() => {
         const left = claims.filter(c => !resolved[claims.indexOf(c)]).length;
-        return left === 0 ? "All 3 items reviewed — ready to send to Finance"
-          : left + (left === 1 ? " item" : " items") + " to review before sending to Finance";
+        return left === 0 ? "All 3 items reviewed"
+          : left + (left === 1 ? " item" : " items") + " to review";
       })(),
       current: this.state.current, total: slides.length,
       assistOpen: this.open,
